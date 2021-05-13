@@ -9,11 +9,10 @@ Link do Back-end: https://github.com/rochac2lee/helpme-api.git
 
 ## Features
 
-· Cadastro de usuários
-· Cadastro de tickets
-· Acompanhamento dos tickets em tempo real
-· Dashboard com informações principais
-
+* [ ] Cadastro de usuários
+* [ ] Cadastro de tickets
+* [ ] Dashboard com informações principais
+* [ ] Acompanhamento dos tickets em tempo real
 
 ## Requisitos
 
