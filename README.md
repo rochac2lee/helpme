@@ -17,8 +17,8 @@ Link do Back-end: https://github.com/rochac2lee/helpme-api.git
 
 ## Requisitos
 
-· Vue CLI 4.5.11
-· Yarn 1.22.5
+* [ ] Vue CLI 4.5.11
+* [ ] Yarn 1.22.5
 
 ## Instalação
 
