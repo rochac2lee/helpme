@@ -70,37 +70,20 @@ export default {
             icon: "fa fa-home",
           },
           {
+            href: "/tickets",
+            title: "Chamados",
+            icon: "fa fa-laptop-code",
+          },
+          {
             href: "/clients",
             title: "Clientes",
             icon: "fa fa-address-book",
           },
           {
-            href: "/services",
-            title: "Serviços",
-            icon: "fa fa-laptop-code",
-          },
-          {
             href: "/users",
             title: "Usuários",
             icon: "fa fa-users",
-          },
-          {
-            href: "http://opweb0018.servidorwebfacil.com:8880/",
-            external: true,
-            title: "Servidor",
-            icon: "fa fa-server",
-          },
-          {
-            href: "https://www.nfs-e.net/fiscalweb.php",
-            external: true,
-            title: "Gerar NFS-e",
-            icon: "fa fa-file-signature",
-          },
-          {
-            href: "reports",
-            title: "Relatórios",
-            icon: "fa fa-tasks",
-          },
+          }
         ];
 
         break;
@@ -113,15 +96,10 @@ export default {
             icon: "fa fa-home",
           },
           {
-            href: "/users",
-            title: "Usuários",
+            href: "/tickets",
+            title: "Chamados",
             icon: "fa fa-users",
-          },
-          {
-            href: "reports",
-            title: "Relatórios",
-            icon: "fa fa-tasks",
-          },
+          }
         ];
 
         break;

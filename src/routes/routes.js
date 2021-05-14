@@ -1,5 +1,4 @@
 import layout from "@/views/layouts/Layout.vue"
-import layoutConfig from "@/views/layouts/LayoutConfig.vue"
 import login from "@/views/system/Login.vue"
 
 const routes = [{
@@ -25,57 +24,10 @@ const routes = [{
                     import ('../views/pages/Users.vue'),
             },
             {
-                path: '/services',
-                name: 'services',
+                path: '/tickets',
+                name: 'tickets',
                 component: () =>
-                    import ('../views/pages/Services.vue'),
-            }
-        ]
-    },
-    {
-        path: '/config/site',
-        component: layoutConfig,
-        children: [{
-                path: '/config/home',
-                name: 'Home',
-                component: () =>
-                    import ('../views/pages/Site.vue')
-            },
-            {
-                path: '/config/pages',
-                name: 'Pages',
-                component: () =>
-                    import ('../views/pages/Site.vue')
-            },
-            {
-                path: '/config/files',
-                name: 'Files',
-                component: () =>
-                    import ('../views/pages/Site.vue')
-            },
-            {
-                path: '/config/emails',
-                name: 'Emails',
-                component: () =>
-                    import ('../views/pages/Site.vue')
-            },
-            {
-                path: '/config/newsletter',
-                name: 'Newsletter',
-                component: () =>
-                    import ('../views/pages/Site.vue')
-            },
-            {
-                path: '/config/themes',
-                name: 'Themes',
-                component: () =>
-                    import ('../views/pages/Site.vue')
-            },
-            {
-                path: '/config/advanced',
-                name: 'Advanced',
-                component: () =>
-                    import ('../views/pages/Site.vue')
+                    import ('../views/pages/Tickets.vue'),
             }
         ]
     },
