@@ -4,15 +4,15 @@ import VueCookies from "vue-cookies"
 
 Vue.use(VueCookies)
 
-const API_HOST = "45.82.72.105"
+//const API_HOST = "45.82.72.105"
 
-//const API_HOST = window.location.hostname
-//const API_PORT = 8000
+const API_HOST = window.location.hostname
+const API_PORT = 8000
 
-const API_REST = "managio-api/api"
+const API_REST = "api"
 
 const api = axios.create({
-    baseURL: `http://${API_HOST}/${API_REST}`
+    baseURL: `http://${API_HOST}:${API_PORT}/${API_REST}`
 })
 
 const config = () => ({

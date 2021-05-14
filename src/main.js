@@ -39,7 +39,7 @@ Vue.use(Swal, options);
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 
-Vue.$cookies.set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzeXMiOiJNYW5hZy5pbyIsImRlc2MiOiJTaXN0ZW1hIGRlIEdlc3TDo28gZGUgSWdyZWphcyIsImNvbSI6IkVuY29kZSBEZXYiLCJkZXYiOiJDbGViZXIgTGVlIGRhIFJvY2hhIiwidGFyZ2V0IjoiQ2h1cmNoZXMiLCJwc3MiOiJkZXZFbmNMZWU4NDg2MjVAMjAyMSF-In0.ftJpFnt2AbIKeZkfZMyrilQNViLWLuvubepZladuu0Y')
+Vue.$cookies.set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzeXMiOiJoZWxwbWUiLCJkZXNjIjoiU2lzdGVtYSBkZSBHZXN0w6NvIGRlIENoYW1hZG9zIiwiY29tIjoiRW5jb2RlIERldiIsImRldiI6IkNsZWJlciBMZWUgZGEgUm9jaGEiLCJ0YXJnZXQiOiJUaWNrZXRzIiwicHNzIjoiZGV2RW5jTGVlODQ4NjI1QDIwMjEhfiJ9.vr_fR8zPw194nlvjntglILAYOgPALjPRPA794eZ6yKc')
 
 //Estilos CSS
 require('@/assets/css/styles.css')
