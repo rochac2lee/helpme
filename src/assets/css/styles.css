@@ -35,6 +35,10 @@
     word-break: break-word;
 }
 
+.card-followTickets .md-card-content {
+    padding: 16px;
+}
+
 .md-card-header:first-child>.md-card-header-text>.md-title:first-child,
 .md-card-header:first-child>.md-title:first-child {
     margin-top: 0;
@@ -456,10 +460,6 @@ a {
     width: 100%;
 }
 
-.vsm_expanded {
-    max-width: 300px!important;
-}
-
 .bgSidebar {
     width: 100%;
     background: #000000ab;
@@ -501,9 +501,36 @@ a {
     color: white;
 }
 
+.md-badge {
+    position: absolute;
+    transition: .3s cubic-bezier(.4, 0, .2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: auto;
+    margin-top: -8px;
+    font-size: 10px;
+    font-style: normal;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    color: #fff;
+    pointer-events: none;
+    z-index: 6;
+}
+
 .v-sidebar-menu {
     max-width: 80px;
     background: linear-gradient(0deg, #3c3c3c 0%, var(--cor-bg-principal) 100%);
+}
+
+.nameUserTicket {
+    padding-left: 10%;
+}
+
+.iconUserTicket {
+    width: 8%;
+    float: left;
 }
 
 .iconAgentPanel {
@@ -655,8 +682,43 @@ a {
 }
 
 .v-sidebar-menu .vsm--title {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
+}
+
+.ticketUser {
+    margin-left: 3px;
+    display: inline-flex;
+}
+
+.badge-info {
+    color: #fff!important;
+    background-color: #17a2b8!important;
+}
+
+.badge-primary {
+    color: #fff!important;
+    background-color: #007bff!important;
+}
+
+.badge-secondary {
+    color: #fff!important;
+    background-color: #6c757d!important;
+}
+
+.badge-warning {
+    color: #212529!important;
+    background-color: #ffc107!important;
+}
+
+.badge-success {
+    color: #fff!important;
+    background-color: #28a745!important;
+}
+
+.badge-danger {
+    color: #fff!important;
+    background-color: #dc3545!important;
 }
 
 .b-avatar {

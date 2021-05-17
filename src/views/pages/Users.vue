@@ -181,7 +181,7 @@ export default {
               icon: "success",
               title: "Sucesso!",
               html:
-                '<div style="padding-bottom: 2.3em">Cliente cadastrado com sucesso!</div>',
+                '<div style="padding-bottom: 2.3em">Usuário cadastrado com sucesso!</div>',
               showConfirmButton: false,
               timerProgressBar: true,
               timer: 3000,
@@ -193,7 +193,7 @@ export default {
               icon: "error",
               title: "Atenção!",
               html:
-                '<div style="padding-bottom: 2.3em">Não foi possível cadastrar o cliente!</div>',
+                '<div style="padding-bottom: 2.3em">Não foi possível cadastrar o usuário!</div>',
               showConfirmButton: false,
               timerProgressBar: true,
               timer: 3000,
@@ -211,7 +211,7 @@ export default {
               icon: "success",
               title: "Sucesso!",
               html:
-                '<div style="padding-bottom: 2.3em">Cliente atualizado com sucesso!</div>',
+                '<div style="padding-bottom: 2.3em">Usuário atualizado com sucesso!</div>',
               showConfirmButton: false,
               timerProgressBar: true,
               timer: 3000,
@@ -224,7 +224,7 @@ export default {
               icon: "error",
               title: "Atenção!",
               html:
-                '<div style="padding-bottom: 2.3em">Não foi possível alterar o cliente!</div>',
+                '<div style="padding-bottom: 2.3em">Não foi possível alterar o usuário!</div>',
               showConfirmButton: false,
               timerProgressBar: true,
               timer: 3000,
@@ -244,7 +244,7 @@ export default {
     remove(data) {
       this.$swal({
         title: "Exclusão",
-        html: "Deseja realmente excluir esse Cliente?",
+        html: "Deseja realmente excluir esse usuário?",
         showDenyButton: true,
         reverseButtons: true,
         showClass: {
@@ -265,7 +265,7 @@ export default {
                 icon: "success",
                 title: "Sucesso!",
                 html:
-                  '<div style="padding-bottom: 2.3em">Cliente removido com sucesso!</div>',
+                  '<div style="padding-bottom: 2.3em">Usuário removido com sucesso!</div>',
                 showConfirmButton: false,
                 timerProgressBar: true,
                 timer: 3000,
@@ -277,7 +277,7 @@ export default {
                 icon: "error",
                 title: "Atenção!",
                 html:
-                  '<div style="padding-bottom: 2.3em">Não foi possível excluir o cliente!</div>',
+                  '<div style="padding-bottom: 2.3em">Não foi possível excluir o usuário!</div>',
                 showConfirmButton: false,
                 timerProgressBar: true,
                 timer: 3000,
@@ -294,7 +294,7 @@ export default {
             icon: "info",
             title: "Tudo Bem!",
             html:
-              '<div style="padding-bottom: 2.3em">O cliente permanece cadastrado!</div>',
+              '<div style="padding-bottom: 2.3em">O usuário permanece cadastrado!</div>',
             showConfirmButton: false,
             timerProgressBar: true,
             timer: 3000,

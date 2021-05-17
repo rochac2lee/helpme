@@ -9,7 +9,7 @@
             <div class="right">
               <md-button
                 class="md-icon-button inline-flex"
-                v-if="viewServices == true"
+                v-if="viewFollowTicket == true"
                 @click="viewFormToEdit(selected)"
               >
                 <md-icon>edit</md-icon>
@@ -17,7 +17,7 @@
 
               <md-button
                 class="md-icon-button inline-flex"
-                v-if="add == false && viewClients == true"
+                v-if="add == false && viewTicket == true"
                 @click="
                   viewForm();
                   clearForm();
@@ -28,7 +28,7 @@
 
               <md-button
                 class="md-icon-button inline-flex"
-                v-if="viewClients == false"
+                v-if="viewTicket == false"
                 @click="cancelForm()"
               >
                 <md-icon>keyboard_return</md-icon>
@@ -38,199 +38,111 @@
           <md-card-content>
             <!-- Listagem -->
             <md-table
-              v-model="data"
+              v-model="tickets"
               md-sort="first_name"
               md-sort-order="asc"
               md-card
               md-fixed-header
-              v-if="viewClients == true"
+              v-if="viewTicket == true"
             >
               <md-table-row
                 slot="md-table-row"
                 slot-scope="{ item }"
-                @click="(selected = item), viewServicesByClients(item)"
+                @click="(selected = item), getFollowTicketById(item)"
               >
-                <md-table-cell md-label="Nome Completo" md-sort-by="first_name">
+                <md-table-cell md-label="Status" md-sort-by="status">
+                  <md-badge :class="badgeVariant(item.status_id)" class="md-square" :md-content="item.status" />
+                </md-table-cell>
+                <md-table-cell md-label="Título" md-sort-by="title">
+                  {{ item.title }}
+                </md-table-cell>
+                <md-table-cell md-label="Usuário">
                   {{ item.first_name }} {{ item.last_name }}
                 </md-table-cell>
-                <md-table-cell md-label="Email" md-sort-by="email">{{
-                  item.email
-                }}</md-table-cell>
-                <md-table-cell md-label="Telefone" md-sort-by="phone">
-                  <the-mask
-                    class="hide"
-                    v-model="item.phone"
-                    :masked="true"
-                    :mask="['(##) ####-####', '(##) #####-####']"
-                  />
-                  {{ item.phone }}</md-table-cell
-                >
+                
               </md-table-row>
             </md-table>
 
             <!-- Serviços por Cliente -->
             <div
               class="md-layout md-gutter md-content"
-              v-if="viewServices == true"
+              v-if="viewFollowTicket == true"
             >
               <div
-                class="md-layout-item md-size-33"
-                v-for="service in data2"
-                :key="service.id"
+                class="md-layout-item md-size-100"
+                v-for="data in followTickets"
+                :key="data.id"
               >
-                <md-card class="card-service">
-                  <md-card-header>
-                    <div class="md-title">{{ service.title }}</div>
-                  </md-card-header>
-
-                  <md-card-content>
-                    <div>{{ service.service }} | {{ status(service.status) }}</div>
-                    <div>{{ service.description }}</div>
-                  </md-card-content>
-                  <md-card-actions>
-                    <md-button
-                      class="md-icon-button inline-flex"
-                      @click="editService(service)"
-                    >
-                      <md-icon>open_in_new</md-icon>
-                    </md-button>
-                    <md-button
-                      class="md-icon-button inline-flex"
-                      @click="removeService(service)"
-                    >
-                      <md-icon>delete</md-icon>
-                    </md-button>
-                  </md-card-actions>
-                </md-card>
-              </div>
-              <div class="md-layout-item md-size-33">
-                <md-card
-                  class="card-service pointer addService"
-                  @click.native="viewFormService()"
-                >
-                  <md-card-header>
-                    <md-button class="md-icon-button inline-flex">
-                      <md-icon>add_circle_outline</md-icon>
-                    </md-button>
-                    <div class="md-title btnTitle">Novo Serviço</div>
-                  </md-card-header>
-
-                  <md-card-content> </md-card-content>
-                </md-card>
+                <img :src="user" class="iconUserTicket" />
+                <p class="nameUserTicket">{{ data.first_name }}</p>
+                <div class="md-layout-item md-size-90 right">
+                  <md-card class="card-followTickets">
+                    <md-card-content md-alignment="space-between">
+                      <md-card-expand>
+                        <div class="left">
+                          <md-icon>info</md-icon>
+                        <span class="ticketUser">
+                          {{ data.description }}
+                        </span>
+                      </div>
+                        <div class="right">
+                          {{ data.created_at }}
+                        </div>
+                      </md-card-expand>
+                      
+                    </md-card-content>
+                    <md-card-actions md-alignment="space-between">
+                      <div>
+                        <md-badge class="md-square" :class="badgeVariant(data.status_id)" :md-content="data.status" />
+                      </div>
+                      <md-button
+                        class="md-icon-button inline-flex"
+                        @click="removeFollowTicket(data)"
+                      >
+                        <md-icon>delete</md-icon>
+                      </md-button>
+                    </md-card-actions>
+                  </md-card>
+                </div>
               </div>
             </div>
 
-            <!-- Cadastro de clientes -->
+            <!-- Cadastro de Tickets -->
             <div class="md-layout" v-if="add == true">
               <form @submit.prevent="sendForm">
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-80">
                   <md-field>
-                    <label>Nome</label>
-                    <md-input
-                      v-model="clients.first_name"
-                      type="text"
-                    ></md-input>
+                    <label>Título</label>
+                    <md-input v-model="tickets.title" type="text"></md-input>
                   </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-20">
                   <md-field>
-                    <label>Sobrenome</label>
-                    <md-input
-                      v-model="clients.last_name"
-                      type="text"
-                    ></md-input>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>
-                    <the-mask
-                      class="md-input"
-                      v-model="clients.phone"
-                      placeholder="Telefone"
-                      :mask="['(##) #####-####', '(##) ####-####']"
-                      trim
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-66">
-                  <md-field>
-                    <label>Email</label>
-                    <md-input v-model="clients.email" type="text"></md-input>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>
-                    <the-mask
-                      class="md-input"
-                      v-model="clients.cnpj_cpf"
-                      placeholder="CNPJ/CPF"
-                      :mask="['###.###.###-##', '##.###.###/####-##']"
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-100">
-                  <md-field>
-                    <label>Endereço</label>
-                    <md-input v-model="clients.address" type="text"></md-input>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>
-                    <label>Estado</label>
-                    <md-select v-model="clients.state" name="state" id="state">
+                    <label>Status</label>
+                    <md-select
+                      v-model="tickets.status_id"
+                      name="state"
+                      id="state"
+                    >
                       <md-option
-                        v-for="state in states"
-                        :key="state.sigla"
-                        :value="state.sigla"
-                        @click.native="getCity(clients.state)"
-                        >{{ state.nome }}</md-option
+                        v-for="status in statusTicket"
+                        :key="status.id"
+                        :value="status.id"
+                        >{{ status.status }}</md-option
                       >
                     </md-select>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>
-                    <label>Cidade</label>
-                    <md-select v-model="clients.city" name="city" id="city">
-                      <md-option
-                        v-for="city in citys"
-                        :key="city.id"
-                        :value="city.nome"
-                        >{{ city.nome }}</md-option
-                      >
-                    </md-select>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>
-                    <the-mask
-                      class="md-input"
-                      v-model="clients.cep"
-                      placeholder="CEP"
-                      :mask="['##.###-###']"
-                    />
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
                   <md-field maxlength="5">
                     <label>Descrição</label>
-                    <md-textarea v-model="clients.description"></md-textarea>
+                    <md-textarea v-model="tickets.description"></md-textarea>
                   </md-field>
                 </div>
-                <div class="md-layout-item md-size-100">
-                  <md-switch v-model="clients.status">{{
-                    status(clients.status)
-                  }}</md-switch>
-                </div>
                 <div class="md-layout-item md-size-100 textRight">
-                  <md-button
-                    @click="remove(clients)"
-                    class="md-raised md-danger left"
-                    >Excluir</md-button
-                  >
-                  <md-button type="submit" class="md-raised md-success"
-                    >Salvar</md-button
-                  >
+                  <md-button type="submit" class="md-raised md-success">
+                    Salvar
+                  </md-button>
                 </div>
               </form>
             </div>
@@ -253,7 +165,12 @@
                       v-model="servicesByClients.service_id"
                       placeholder="Serviço"
                     >
-                      <md-option v-for="service in services" :key="service.id" :value="service.id">{{ service.service }}</md-option> 
+                      <md-option
+                        v-for="service in services"
+                        :key="service.id"
+                        :value="service.id"
+                        >{{ service.service }}</md-option
+                      >
                     </md-select>
                   </md-field>
                 </div>
@@ -286,7 +203,6 @@
 
   <script>
 import Vue from "vue";
-import axios from "axios";
 
 import VueTheMask from "vue-the-mask";
 Vue.use(VueTheMask);
@@ -297,159 +213,137 @@ export default {
     return {
       title: "",
       data: [],
-      data2: [],
-      clients: {
-        first_name: "",
-        last_name: "",
-        phone: "",
-        email: "",
-        cnpj_cpf: "",
-        address: "",
-        state: "",
-        city: "",
-        cep: "",
-        description: "",
-        status: true
-      },
-      states: {},
-      citys: {},
-      servicesByClients: {
+      tickets: [],
+      statusTicket: [],
+      followTickets: [],
+      ticket: {
+        user_id: "",
+        status_id: "",
         title: "",
-        client_id: "",
-        service_id: "",
         description: "",
-        status: true
+      },
+      followTicket: {
+        user_id: "",
+        ticket_id: "",
+        status_id: "",
+        description: "",
       },
       add: false,
       addService: false,
       selected: "",
-      viewClients: true,
-      viewServices: false,
+      viewTicket: true,
+      viewFollowTicket: false,
+      user: require("../../assets/undraw_male_avatar_323b.png"),
     };
   },
   methods: {
-    getClients() {
+    getTickets() {
       this.$http.get(
-        "clients",
-        res => this.data = res.data.data,
-        err => console.error(err)
-      ) 
+        "tickets",
+        (res) => (this.tickets = res.data.data),
+        (err) => console.error(err)
+      );
     },
 
-    getServices() {
+    getStatusTicket() {
       this.$http.get(
-        "services",
-        res => this.services = res.data.data,
-        err => console.error(err)
-      ) 
+        "statusTicket",
+        (res) => (this.statusTicket = res.data.data),
+        (err) => console.error(err)
+      );
     },
 
-    getCity() {
-      axios
-        .get(
-          "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" +
-            this.clients.state +
-            "/municipios"
-        )
-        .then((response) => {
-          (this.citys = response.data), console.log(this.citys);
-        })
-        .catch((error) => console.error(error));
-    },
-
-    getStates() {
-      axios
-        .get(
-          "https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome"
-        )
-        .then((response) => {
-          (this.states = response.data), console.log(this.states);
-        })
-        .catch((error) => console.error(error));
+    getFollowTicketById(ticket) {
+      this.viewTicket = false;
+      this.title = ticket.title;
+      this.viewFollowTicket = true;
+      this.$http.get(
+        `followTicketById/${ticket.id}`,
+        (res) => {
+          (this.followTickets = res.data.data), console.log(this.followTickets);
+        },
+        (err) => console.error(err)
+      );
     },
 
     sendForm() {
-      if (!this.clients.id) {
+      if (!this.tickets.id) {
         this.$http.post(
-          "clients",
-          this.clients,
-          res => {
+          "tickets",
+          this.tickets,
+          (res) => {
             this.$swal({
               icon: "success",
               title: "Sucesso!",
               html:
-                '<div style="padding-bottom: 2.3em">Cliente cadastrado com sucesso!</div>',
+                '<div style="padding-bottom: 2.3em">Ticket cadastrado com sucesso!</div>',
               showConfirmButton: false,
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.log(res);
+              console.log(res);
           },
-          err => {
+          (err) => {
             this.$swal({
               icon: "error",
               title: "Atenção!",
               html:
-                '<div style="padding-bottom: 2.3em">Não foi possível cadastrar o cliente!</div>',
+                '<div style="padding-bottom: 2.3em">Não foi possível cadastrar o ticket!</div>',
               showConfirmButton: false,
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.error(err);
+              console.error(err);
           }
-        ) 
-
+        );
       } else {
-
         this.$http.put(
-          "clients",
-          this.clients,
-          this.clients.id,
-          res => {
+          "tickets",
+          this.tickets,
+          this.tickets.id,
+          (res) => {
             this.$swal({
               icon: "success",
               title: "Sucesso!",
               html:
-                '<div style="padding-bottom: 2.3em">Cliente atualizado com sucesso!</div>',
+                '<div style="padding-bottom: 2.3em">Ticket atualizado com sucesso!</div>',
               showConfirmButton: false,
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.log(res),
-            this.cancelForm()
+              console.log(res),
+              this.cancelForm();
           },
-          err => {
+          (err) => {
             this.$swal({
               icon: "error",
               title: "Atenção!",
               html:
-                '<div style="padding-bottom: 2.3em">Não foi possível alterar o cliente!</div>',
+                '<div style="padding-bottom: 2.3em">Não foi possível alterar o ticket!</div>',
               showConfirmButton: false,
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.error(err);
+              console.error(err);
           }
-        ) 
+        );
       }
 
-      //Atualiza dinamicamente a lista de clientes
+      //Atualiza dinamicamente a lista de Tickets
       setTimeout(() => {
-        this.getClients();
+        this.getTickets();
         this.cancelForm();
       }, 1000);
     },
 
     sendFormService() {
-
       this.servicesByClients.client_id = this.selected.id;
 
       if (!this.servicesByClients.id) {
-
         this.$http.post(
           "servicesByClients",
           this.servicesByClients,
-          res => {
+          (res) => {
             this.$swal({
               icon: "success",
               title: "Sucesso!",
@@ -459,9 +353,9 @@ export default {
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.log(res)
+              console.log(res);
           },
-          err => {
+          (err) => {
             this.$swal({
               icon: "error",
               title: "Atenção!",
@@ -471,17 +365,15 @@ export default {
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.error(err)
+              console.error(err);
           }
-        )
-
+        );
       } else {
-
         this.$http.put(
           "servicesByClients",
           this.servicesByClients,
           this.servicesByClients.id,
-          res => {
+          (res) => {
             this.$swal({
               icon: "success",
               title: "Sucesso!",
@@ -491,10 +383,10 @@ export default {
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.log(res),
-            this.cancelForm();
+              console.log(res),
+              this.cancelForm();
           },
-          err => {
+          (err) => {
             this.$swal({
               icon: "error",
               title: "Atenção!",
@@ -504,28 +396,26 @@ export default {
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.error(err);
-          },
-        )
+              console.error(err);
+          }
+        );
       }
 
-      //Atualiza dinamicamente a lista de clientes
+      //Atualiza dinamicamente a lista de Tickets
       setTimeout(() => {
-        this.getClients()
-        this.cancelForm()
-      }, 1000)
-
+        this.getTickets();
+        this.cancelForm();
+      }, 1000);
     },
 
     editService(service) {
       switch (service.service_id) {
         case 1:
-
           this.$router.push({ name: "Home" });
           this.$store.commit("SITE", {
-            service: service
+            service: service,
           });
-          
+
           break;
       }
     },
@@ -546,11 +436,10 @@ export default {
         confirmButtonText: `Excluir`,
       }).then((result) => {
         if (result.isConfirmed) {
-
           this.$http.delete(
             "clients",
             `${data.id}`,
-            res => {
+            (res) => {
               this.$swal({
                 icon: "success",
                 title: "Sucesso!",
@@ -560,9 +449,9 @@ export default {
                 timerProgressBar: true,
                 timer: 3000,
               }),
-              console.log(res);
+                console.log(res);
             },
-            err => {
+            (err) => {
               this.$swal({
                 icon: "error",
                 title: "Atenção!",
@@ -572,12 +461,12 @@ export default {
                 timerProgressBar: true,
                 timer: 3000,
               }),
-              console.error(err);
+                console.error(err);
             }
-          )
+          );
           setTimeout(() => {
-            this.getClients()
-            this.cancelForm()
+            this.getTickets();
+            this.cancelForm();
           }, 1000);
         } else if (result.isDenied) {
           this.$swal({
@@ -593,10 +482,10 @@ export default {
       });
     },
 
-    removeService(data) {
+    removeFollowTicket(data) {
       this.$swal({
         title: "Exclusão",
-        html: "Deseja realmente desvincular o serviço desse cliente?",
+        html: "Deseja realmente remover esse registro?",
         showDenyButton: true,
         reverseButtons: true,
         showClass: {
@@ -609,45 +498,43 @@ export default {
         confirmButtonText: `Excluir`,
       }).then((result) => {
         if (result.isConfirmed) {
-
           this.$http.delete(
-            "servicesByClients",
+            "followTicket",
             `${data.id}`,
-            res => {
+            (res) => {
               this.$swal({
                 icon: "success",
                 title: "Sucesso!",
                 html:
-                  '<div style="padding-bottom: 2.3em">Serviço desvinculado do cliente com sucesso!</div>',
+                  '<div style="padding-bottom: 2.3em">Registro excluído com sucesso!</div>',
                 showConfirmButton: false,
                 timerProgressBar: true,
                 timer: 3000,
               }),
-              console.log(res);
+                console.log(res);
             },
-            err => {
+            (err) => {
               this.$swal({
                 icon: "error",
                 title: "Atenção!",
                 html:
-                  '<div style="padding-bottom: 2.3em">Não foi possível desvincular o serviço desse cliente!</div>',
+                  '<div style="padding-bottom: 2.3em">Não foi possível excluir esse registro!</div>',
                 showConfirmButton: false,
                 timerProgressBar: true,
                 timer: 3000,
               }),
-              console.error(err);
+                console.error(err);
             }
-          )
+          );
           setTimeout(() => {
-            this.getClients();
-            this.cancelForm();
+            this.getFollowTicketById(this.ticket.id);
           }, 1000);
         } else if (result.isDenied) {
           this.$swal({
             icon: "info",
             title: "Tudo Bem!",
             html:
-              '<div style="padding-bottom: 2.3em">O serviço permanece vinculado ao cliente!</div>',
+              '<div style="padding-bottom: 2.3em">O registro permanece cadastrado!</div>',
             showConfirmButton: false,
             timerProgressBar: true,
             timer: 3000,
@@ -656,86 +543,83 @@ export default {
       });
     },
 
+    badgeVariant(status_id) {
+      var variant = ""
+      switch (status_id) {
+        case 1:
+          variant = "badge-info"
+          break;
+
+        case 2:
+          variant = "badge-secondary"
+          break;
+
+        case 3:
+          variant = "badge-warning"
+          break;
+
+        case 4:
+          variant = "badge-success"
+          break;
+
+        case 5:
+          variant = "badge-danger"
+          break;
+      }
+      return variant
+    },
+
     viewForm() {
-      this.title = "Adicionar";
+      this.title = "Novo Ticket";
       this.add = true;
-      this.viewClients = false;
-      this.viewServices = false;
+      this.viewTicket = false;
+      this.viewFollowTicket = false;
     },
 
     viewFormService() {
-      this.title = "Adicionar Serviço",
-      this.add = false,
-      this.addService = true,
-      this.viewClients = false,
-      this.viewServices = false
+      (this.title = "Adicionar Serviço"),
+        (this.add = false),
+        (this.addService = true),
+        (this.viewTicket = false),
+        (this.viewFollowTicket = false);
     },
 
-    viewServicesByClients(client) {
-      this.title = client.first_name + " " + client.last_name,
-      this.viewClients = false,
-      this.viewServices = true,
-
-      this.$http.get(
-        `servicesByClients/${client.id}`,
-        res => this.data2 = res.data.data,
-        err => console.error(err)
-      )
-    },
-
-    viewFormToEdit(data) {
-      this.clients = data
-      this.getCity()
-      this.title = "Editar"
-      this.add = true
-      this.viewServices = false
+    viewFormToEdit(ticket) {
+      this.add = true;
+      this.tickets = ticket;
+      this.title = ticket.title;
+      this.add = true;
+      this.viewFollowTicket = false;
     },
 
     cancelForm() {
-      this.title = "Clientes"
-      this.add = false
-      this.viewClients = true
-      this.viewServices = false
-      this.addService = false
+      this.title = "Tickets";
+      this.add = false;
+      this.viewTicket = true;
+      this.viewFollowTicket = false;
+      this.getTickets();
     },
 
     clearForm() {
       this.clients = {
-        first_name: "",
-        last_name: "",
-        phone: "",
-        email: "",
-        cnpj_cpf: "",
-        address: "",
-        state: "",
-        city: "",
-        cep: "",
+        user_id: "",
+        status_id: 1,
+        title: "",
         description: "",
-        status: true,
       };
     },
-
-    status(status) {
-      if (status === true) {
-        return "Ativo";
-      } else {
-        return "Inativo";
-      }
-    },
-  
   },
 
   mounted() {
-    this.title = "Clientes"
-    this.getClients()
-    this.getStates()
-    this.getServices()
+    this.title = "Tickets";
+    this.getTickets();
+    this.getStatusTicket();
   },
 };
 </script>
 
 <style scoped>
-.card-service {
+.card-followTickets {
   background-color: #e9ecef;
 }
 
