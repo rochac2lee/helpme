@@ -7,6 +7,25 @@
             <div class="md-title">{{ title }}</div>
 
             <div class="right">
+              <span v-if="this.selected.status_id != 4">
+                <md-button
+                  class="md-icon-button inline-flex"
+                  v-if="viewFollowTicket == true"
+                  @click="viewUpdateTicket = !viewUpdateTicket, clearFollowTicketForm()"
+                >
+                  <md-icon>refresh</md-icon>
+                </md-button>
+              </span>
+              <span v-else>
+                <md-button
+                  class="md-square inline-flex"
+                  style="margin-right: 15px"
+                  v-if="viewFollowTicket == true"
+                  @click="viewUpdateTicket = !viewUpdateTicket, clearFollowTicketForm()"
+                >
+                reabrir ticket
+                </md-button>
+              </span>
               <md-button
                 class="md-icon-button inline-flex"
                 v-if="viewFollowTicket == true"
@@ -51,7 +70,11 @@
                 @click="(selected = item), getFollowTicketById(item)"
               >
                 <md-table-cell md-label="Status" md-sort-by="status">
-                  <md-badge :class="badgeVariant(item.status_id)" class="md-square" :md-content="item.status" />
+                  <md-badge
+                    :class="badgeVariant(item.status_id)"
+                    class="md-square"
+                    :md-content="item.status"
+                  />
                 </md-table-cell>
                 <md-table-cell md-label="Título" md-sort-by="title">
                   {{ item.title }}
@@ -59,15 +82,72 @@
                 <md-table-cell md-label="Usuário">
                   {{ item.first_name }} {{ item.last_name }}
                 </md-table-cell>
-                
               </md-table-row>
             </md-table>
 
-            <!-- Serviços por Cliente -->
+            <!-- Atualizações do Ticket selecionado -->
             <div
               class="md-layout md-gutter md-content"
               v-if="viewFollowTicket == true"
             >
+              <div
+                class="md-layout-item md-size-100"
+                v-if="viewUpdateTicket == true"
+              >
+                <form @submit.prevent="sendUpdateTicketForm">
+                  <div class="md-layout-item md-small-size-100 md-size-20">
+                    <md-field>
+                      <label>Status</label>
+                      <md-select
+                        v-model="followTicket.status_id"
+                        name="state"
+                        id="state"
+                      >
+                        <md-option
+                          v-for="status in statusTicket"
+                          :key="status.id"
+                          :value="status.id"
+                          >{{ status.status }}</md-option
+                        >
+                      </md-select>
+                    </md-field>
+                  </div>
+                  <div class="md-layout-item md-size-100">
+                    <md-field maxlength="5">
+                      <label>Descrição</label>
+                      <md-textarea v-model="followTicket.description"></md-textarea>
+                    </md-field>
+                  </div>
+                  <div class="md-layout-item md-size-100 textRight">
+                    <md-button type="submit" class="md-raised md-success">
+                      Atualizar
+                    </md-button>
+                  </div>
+                </form>
+
+                <hr />
+              </div>
+              <div class="md-layout-item md-size-100">
+                <img :src="user" class="iconUserTicket" />
+                <p class="nameUserTicket">{{ selected.first_name }}</p>
+                <div class="md-layout-item md-size-90 right">
+                  <md-card class="card-followTickets">
+                    <md-card-content md-alignment="space-between">
+                      <md-card-expand>
+                        <div class="left">
+                          <md-icon>info</md-icon>
+                          <span class="ticketUser">
+                            {{ selected.description }}
+                          </span>
+                        </div>
+                        <div class="right">
+                          {{ selected.created_at }}
+                        </div>
+                      </md-card-expand>
+                    </md-card-content>
+                  </md-card>
+                </div>
+              </div>
               <div
                 class="md-layout-item md-size-100"
                 v-for="data in followTickets"
@@ -81,19 +161,22 @@
                       <md-card-expand>
                         <div class="left">
                           <md-icon>info</md-icon>
-                        <span class="ticketUser">
-                          {{ data.description }}
-                        </span>
-                      </div>
+                          <span class="ticketUser">
+                            {{ data.description }}
+                          </span>
+                        </div>
                         <div class="right">
                           {{ data.created_at }}
                         </div>
                       </md-card-expand>
-                      
                     </md-card-content>
                     <md-card-actions md-alignment="space-between">
                       <div>
-                        <md-badge class="md-square" :class="badgeVariant(data.status_id)" :md-content="data.status" />
+                        <md-badge
+                          class="md-square"
+                          :class="badgeVariant(data.status_id)"
+                          :md-content="data.status"
+                        />
                       </div>
                       <md-button
                         class="md-icon-button inline-flex"
@@ -146,54 +229,6 @@
                 </div>
               </form>
             </div>
-
-            <!-- Vincular serviço ao cliente selecionado -->
-            <div class="md-layout" v-if="addService == true">
-              <form @submit.prevent="sendFormService">
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>
-                    <label>Título</label>
-                    <md-input
-                      v-model="servicesByClients.title"
-                      type="text"
-                    ></md-input>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>
-                    <md-select
-                      v-model="servicesByClients.service_id"
-                      placeholder="Serviço"
-                    >
-                      <md-option
-                        v-for="service in services"
-                        :key="service.id"
-                        :value="service.id"
-                        >{{ service.service }}</md-option
-                      >
-                    </md-select>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                  <md-field maxlength="5">
-                    <label>Descrição</label>
-                    <md-textarea
-                      v-model="servicesByClients.description"
-                    ></md-textarea>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                  <md-switch v-model="servicesByClients.status">{{
-                    status(servicesByClients.status)
-                  }}</md-switch>
-                </div>
-                <div class="md-layout-item md-size-100 textRight">
-                  <md-button type="submit" class="md-raised md-success"
-                    >Salvar</md-button
-                  >
-                </div>
-              </form>
-            </div>
           </md-card-content>
         </md-card>
       </div>
@@ -230,9 +265,10 @@ export default {
       },
       add: false,
       addService: false,
-      selected: "",
+      selected: [],
       viewTicket: true,
       viewFollowTicket: false,
+      viewUpdateTicket: false,
       user: require("../../assets/undraw_male_avatar_323b.png"),
     };
   },
@@ -297,10 +333,10 @@ export default {
           }
         );
       } else {
-        this.$http.put(
+        this.$http.patch(
           "tickets",
-          this.tickets,
           this.tickets.id,
+          this.tickets,
           (res) => {
             this.$swal({
               icon: "success",
@@ -336,88 +372,44 @@ export default {
       }, 1000);
     },
 
-    sendFormService() {
-      this.servicesByClients.client_id = this.selected.id;
+    sendUpdateTicketForm() {
+      this.followTicket.ticket_id = this.selected.id;
+      this.followTicket.user_id = this.$cookies.get("user_id");
 
-      if (!this.servicesByClients.id) {
-        this.$http.post(
-          "servicesByClients",
-          this.servicesByClients,
-          (res) => {
-            this.$swal({
-              icon: "success",
-              title: "Sucesso!",
-              html:
-                '<div style="padding-bottom: 2.3em">Serviço vinculado ao cliente com sucesso!</div>',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            }),
-              console.log(res);
-          },
-          (err) => {
-            this.$swal({
-              icon: "error",
-              title: "Atenção!",
-              html:
-                '<div style="padding-bottom: 2.3em">Não foi possível vincular o serviço ao cliente!</div>',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            }),
-              console.error(err);
-          }
-        );
-      } else {
-        this.$http.put(
-          "servicesByClients",
-          this.servicesByClients,
-          this.servicesByClients.id,
-          (res) => {
-            this.$swal({
-              icon: "success",
-              title: "Sucesso!",
-              html:
-                '<div style="padding-bottom: 2.3em">Serviço atualizado com sucesso!</div>',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            }),
-              console.log(res),
-              this.cancelForm();
-          },
-          (err) => {
-            this.$swal({
-              icon: "error",
-              title: "Atenção!",
-              html:
-                '<div style="padding-bottom: 2.3em">Não foi possível alterar o serviço!</div>',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            }),
-              console.error(err);
-          }
-        );
-      }
+      this.$http.post(
+        "followTicket",
+        this.followTicket,
+        (res) => {
+          this.$swal({
+            icon: "success",
+            title: "Sucesso!",
+            html:
+              '<div style="padding-bottom: 2.3em">Ticket atualizado com sucesso!</div>',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          }),
+            console.log(res)
+        },
+        (err) => {
+          this.$swal({
+            icon: "error",
+            title: "Atenção!",
+            html:
+              '<div style="padding-bottom: 2.3em">Não foi possível alterar o ticket!</div>',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          }),
+            console.error(err);
+        }
+      );
 
       //Atualiza dinamicamente a lista de Tickets
       setTimeout(() => {
-        this.getTickets();
-        this.cancelForm();
+        this.getFollowTicketById(this.selected);
+        this.cancelFollowTicketForm();
       }, 1000);
-    },
-
-    editService(service) {
-      switch (service.service_id) {
-        case 1:
-          this.$router.push({ name: "Home" });
-          this.$store.commit("SITE", {
-            service: service,
-          });
-
-          break;
-      }
     },
 
     remove(data) {
@@ -527,7 +519,8 @@ export default {
             }
           );
           setTimeout(() => {
-            this.getFollowTicketById(this.ticket.id);
+            this.getFollowTicketById(this.selected);
+            this.cancelFollowTicketForm();
           }, 1000);
         } else if (result.isDenied) {
           this.$swal({
@@ -544,29 +537,29 @@ export default {
     },
 
     badgeVariant(status_id) {
-      var variant = ""
+      var variant = "";
       switch (status_id) {
         case 1:
-          variant = "badge-info"
+          variant = "badge-info";
           break;
 
         case 2:
-          variant = "badge-secondary"
+          variant = "badge-secondary";
           break;
 
         case 3:
-          variant = "badge-warning"
+          variant = "badge-warning";
           break;
 
         case 4:
-          variant = "badge-success"
+          variant = "badge-success";
           break;
 
         case 5:
-          variant = "badge-danger"
+          variant = "badge-danger";
           break;
       }
-      return variant
+      return variant;
     },
 
     viewForm() {
@@ -577,11 +570,11 @@ export default {
     },
 
     viewFormService() {
-      (this.title = "Adicionar Serviço"),
-        (this.add = false),
-        (this.addService = true),
-        (this.viewTicket = false),
-        (this.viewFollowTicket = false);
+      this.title = "Adicionar Serviço";
+      this.add = false;
+      this.addService = true;
+      this.viewTicket = false;
+      this.viewFollowTicket = false;
     },
 
     viewFormToEdit(ticket) {
@@ -597,17 +590,33 @@ export default {
       this.add = false;
       this.viewTicket = true;
       this.viewFollowTicket = false;
+      this.viewUpdateTicket = false;
       this.getTickets();
     },
 
+    cancelFollowTicketForm() {
+      this.add = false;
+      this.viewTicket = false;
+      this.viewFollowTicket = true;
+      this.viewUpdateTicket = false;
+    },
+
     clearForm() {
-      this.clients = {
+      this.tickets = {
         user_id: "",
         status_id: 1,
         title: "",
         description: "",
       };
     },
+
+    clearFollowTicketForm() {
+      this.followTicket = {
+        status_id: this.selected.status_id,
+        description: "",
+      };
+    },
+
   },
 
   mounted() {
