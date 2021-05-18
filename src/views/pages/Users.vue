@@ -42,13 +42,16 @@
                 slot-scope="{ item }"
                 @click="edit(item)"
               >
-                <md-table-cell md-label="Nome Completo" md-sort-by="first_name">
+                <md-table-cell md-label="Nome Completo">
                   {{ item.first_name }} {{ item.last_name }}
                 </md-table-cell>
-                <md-table-cell md-label="Usuário" md-sort-by="username">{{
+                <md-table-cell md-label="Perfil">{{
+                  item.permission
+                }}</md-table-cell>
+                <md-table-cell md-label="Usuário">{{
                   item.username
                 }}</md-table-cell>
-                <md-table-cell md-label="Email" md-sort-by="email">{{
+                <md-table-cell md-label="Email">{{
                   item.email
                 }}</md-table-cell>
               </md-table-row>
@@ -57,24 +60,48 @@
             <!-- Cadastro de usuários -->
             <div class="md-layout" v-if="add == true">
               <form @submit.prevent="sendForm">
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-20">
                   <md-field>
                     <label>Nome</label>
                     <md-input v-model="user.first_name" type="text"></md-input>
                   </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-20">
                   <md-field>
                     <label>Sobrenome</label>
                     <md-input v-model="user.last_name" type="text"></md-input>
                   </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-33" v-if="rule_type == true">
+                <div
+                  class="md-layout-item md-small-size-100 md-size-30"
+                  v-if="rule_type == true"
+                >
                   <md-field>
                     <label>Perfil</label>
-                    <md-select v-model="user.permission_id" name="city" id="city">
+                    <md-select
+                      v-model="user.permission_id"
+                      name="city"
+                      id="city"
+                    >
                       <md-option value="1">Administrador</md-option>
                       <md-option value="2">Cliente</md-option>
+                    </md-select>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-30" v-if="user.permission_id == 2">
+                  <md-field>
+                    <label>Cliente</label>
+                    <md-select
+                      v-model="user.client_id"
+                      name="state"
+                      id="state"
+                    >
+                      <md-option
+                        v-for="client in clients"
+                        :key="client.id"
+                        :value="client.id"
+                        >{{ client.first_name }} {{ client.last_name}}</md-option
+                      >
                     </md-select>
                   </md-field>
                 </div>
@@ -85,7 +112,7 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>                    
+                  <md-field>
                     <label>Usuário</label>
                     <md-input v-model="user.username" type="text"></md-input>
                   </md-field>
@@ -93,11 +120,14 @@
                 <div class="md-layout-item md-small-size-100 md-size-33">
                   <md-field>
                     <label>Senha</label>
-                    <md-input v-model="user.password" type="password"></md-input>
+                    <md-input
+                      v-model="user.password"
+                      type="password"
+                    ></md-input>
                   </md-field>
                 </div>
                 <div class="switch md-layout-item md-small-size-100 md-size-20">
-                  <label>Status</label><br>
+                  <label>Status</label><br />
                   <md-switch v-model="user.status">{{
                     status(user.status)
                   }}</md-switch>
@@ -120,7 +150,6 @@
                 </div>
               </form>
             </div>
-
           </md-card-content>
         </md-card>
       </div>
@@ -143,8 +172,10 @@ export default {
     return {
       title: "",
       users: [],
+      clients: [],
 
       user: {
+        client_id: "",
         first_name: "",
         last_name: "",
         username: "",
@@ -165,8 +196,16 @@ export default {
         "users",
         (res) => {
           console.log(res.data.data);
-          this.users = res.data.data          
+          this.users = res.data.data;
         },
+        (err) => console.error(err)
+      );
+    },
+
+    getClients() {
+      this.$http.get(
+        "clients",
+        (res) => (this.clients = res.data.data),
         (err) => console.error(err)
       );
     },
@@ -325,6 +364,7 @@ export default {
 
     clearForm() {
       this.user = {
+        client_id: "",
         first_name: "",
         last_name: "",
         username: "",
@@ -345,6 +385,7 @@ export default {
 
   mounted() {
     this.title = "Usuários";
+    this.getClients();
     this.getUsers();
   },
 };

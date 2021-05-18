@@ -443,68 +443,6 @@ export default {
       }, 1000);
     },
 
-    remove(data) {
-      this.$swal({
-        title: "Exclusão",
-        html: "Deseja realmente excluir esse Cliente?",
-        showDenyButton: true,
-        reverseButtons: true,
-        showClass: {
-          popup: "animate__animated animate__fadeIn",
-        },
-        hideClass: {
-          popup: "animate__animated animate__fadeOut",
-        },
-        denyButtonText: `Cancelar`,
-        confirmButtonText: `Excluir`,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.$http.delete(
-            "clients",
-            `${data.id}`,
-            (res) => {
-              this.$swal({
-                icon: "success",
-                title: "Sucesso!",
-                html:
-                  '<div style="padding-bottom: 2.3em">Cliente removido com sucesso!</div>',
-                showConfirmButton: false,
-                timerProgressBar: true,
-                timer: 3000,
-              }),
-                console.log(res);
-            },
-            (err) => {
-              this.$swal({
-                icon: "error",
-                title: "Atenção!",
-                html:
-                  '<div style="padding-bottom: 2.3em">Não foi possível excluir o cliente!</div>',
-                showConfirmButton: false,
-                timerProgressBar: true,
-                timer: 3000,
-              }),
-                console.error(err);
-            }
-          );
-          setTimeout(() => {
-            this.getTickets();
-            this.cancelForm();
-          }, 1000);
-        } else if (result.isDenied) {
-          this.$swal({
-            icon: "info",
-            title: "Tudo Bem!",
-            html:
-              '<div style="padding-bottom: 2.3em">O cliente permanece cadastrado!</div>',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 3000,
-          });
-        }
-      });
-    },
-
     removeFollowTicket(data) {
       this.$swal({
         title: "Exclusão",
