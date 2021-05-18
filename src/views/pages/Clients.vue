@@ -9,14 +9,6 @@
             <div class="right">
               <md-button
                 class="md-icon-button inline-flex"
-                v-if="viewServices == true"
-                @click="viewFormToEdit(selected)"
-              >
-                <md-icon>edit</md-icon>
-              </md-button>
-
-              <md-button
-                class="md-icon-button inline-flex"
                 v-if="add == false && viewClients == true"
                 @click="
                   viewForm();
@@ -36,87 +28,51 @@
             </div>
           </md-card-header>
           <md-card-content>
-            <!-- Listagem -->
-            <md-table
-              v-model="data"
-              md-sort="first_name"
-              md-sort-order="asc"
-              md-card
-              md-fixed-header
-              v-if="viewClients == true"
-            >
-              <md-table-row
-                slot="md-table-row"
-                slot-scope="{ item }"
-                @click="(selected = item), viewServicesByClients(item)"
+            <div v-if="data.length > 0">
+              <!-- Listagem -->
+              <md-table
+                v-model="data"
+                md-sort="first_name"
+                md-sort-order="asc"
+                md-card
+                md-fixed-header
+                v-if="viewClients == true"
               >
-                <md-table-cell md-label="Nome Completo" md-sort-by="first_name">
-                  {{ item.first_name }} {{ item.last_name }}
-                </md-table-cell>
-                <md-table-cell md-label="Email" md-sort-by="email">{{
-                  item.email
-                }}</md-table-cell>
-                <md-table-cell md-label="Telefone" md-sort-by="phone">
-                  <the-mask
-                    class="hide"
-                    v-model="item.phone"
-                    :masked="true"
-                    :mask="['(##) ####-####', '(##) #####-####']"
-                  />
-                  {{ item.phone }}</md-table-cell
+                <md-table-row
+                  slot="md-table-row"
+                  slot-scope="{ item }"
+                  @click="(selected = item), viewFormToEdit(item)"
                 >
-              </md-table-row>
-            </md-table>
-
-            <!-- Serviços por Cliente -->
-            <div
-              class="md-layout md-gutter md-content"
-              v-if="viewServices == true"
-            >
-              <div
-                class="md-layout-item md-size-33"
-                v-for="service in data2"
-                :key="service.id"
-              >
-                <md-card class="card-service">
-                  <md-card-header>
-                    <div class="md-title">{{ service.title }}</div>
-                  </md-card-header>
-
-                  <md-card-content>
-                    <div>{{ service.service }} | {{ status(service.status) }}</div>
-                    <div>{{ service.description }}</div>
-                  </md-card-content>
-                  <md-card-actions>
-                    <md-button
-                      class="md-icon-button inline-flex"
-                      @click="editService(service)"
-                    >
-                      <md-icon>open_in_new</md-icon>
-                    </md-button>
-                    <md-button
-                      class="md-icon-button inline-flex"
-                      @click="removeService(service)"
-                    >
-                      <md-icon>delete</md-icon>
-                    </md-button>
-                  </md-card-actions>
-                </md-card>
-              </div>
-              <div class="md-layout-item md-size-33">
-                <md-card
-                  class="card-service pointer addService"
-                  @click.native="viewFormService()"
-                >
-                  <md-card-header>
-                    <md-button class="md-icon-button inline-flex">
-                      <md-icon>add_circle_outline</md-icon>
-                    </md-button>
-                    <div class="md-title btnTitle">Novo Serviço</div>
-                  </md-card-header>
-
-                  <md-card-content> </md-card-content>
-                </md-card>
+                  <md-table-cell
+                    md-label="Nome Completo"
+                    md-sort-by="first_name"
+                  >
+                    {{ item.first_name }} {{ item.last_name }}
+                  </md-table-cell>
+                  <md-table-cell md-label="Email" md-sort-by="email">{{
+                    item.email
+                  }}</md-table-cell>
+                  <md-table-cell md-label="Telefone" md-sort-by="phone">
+                    <the-mask
+                      class="hide"
+                      v-model="item.phone"
+                      :masked="true"
+                      :mask="['(##) ####-####', '(##) #####-####']"
+                    />
+                    {{ item.phone }}</md-table-cell
+                  >
+                </md-table-row>
+              </md-table>
+            </div>
+            <div class="empty" v-else>
+              <div class="md-layout md-gutter md-content">
+                <div class="md-layout-item">
+                  <img :src="empty" />
+                </div>
+                <div class="md-layout-item emptyMessage">
+                  <h1>Opa!</h1>
+                  <h3>Nada para mostrar aqui</h3>
+                </div>
               </div>
             </div>
 
@@ -234,49 +190,6 @@
                 </div>
               </form>
             </div>
-
-            <!-- Vincular serviço ao cliente selecionado -->
-            <div class="md-layout" v-if="addService == true">
-              <form @submit.prevent="sendFormService">
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>
-                    <label>Título</label>
-                    <md-input
-                      v-model="servicesByClients.title"
-                      type="text"
-                    ></md-input>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                  <md-field>
-                    <md-select
-                      v-model="servicesByClients.service_id"
-                      placeholder="Serviço"
-                    >
-                      <md-option v-for="service in services" :key="service.id" :value="service.id">{{ service.service }}</md-option> 
-                    </md-select>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                  <md-field maxlength="5">
-                    <label>Descrição</label>
-                    <md-textarea
-                      v-model="servicesByClients.description"
-                    ></md-textarea>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                  <md-switch v-model="servicesByClients.status">{{
-                    status(servicesByClients.status)
-                  }}</md-switch>
-                </div>
-                <div class="md-layout-item md-size-100 textRight">
-                  <md-button type="submit" class="md-raised md-success"
-                    >Salvar</md-button
-                  >
-                </div>
-              </form>
-            </div>
           </md-card-content>
         </md-card>
       </div>
@@ -309,39 +222,25 @@ export default {
         city: "",
         cep: "",
         description: "",
-        status: true
+        status: true,
       },
       states: {},
       citys: {},
-      servicesByClients: {
-        title: "",
-        client_id: "",
-        service_id: "",
-        description: "",
-        status: true
-      },
       add: false,
-      addService: false,
       selected: "",
       viewClients: true,
-      viewServices: false,
+
+      //Imagem de retorno quando não houverem dados cadastrados
+      empty: require("../../assets/images/undraw_empty_xct9.png"),
     };
   },
   methods: {
     getClients() {
       this.$http.get(
         "clients",
-        res => this.data = res.data.data,
-        err => console.error(err)
-      ) 
-    },
-
-    getServices() {
-      this.$http.get(
-        "services",
-        res => this.services = res.data.data,
-        err => console.error(err)
-      ) 
+        (res) => (this.data = res.data.data),
+        (err) => console.error(err)
+      );
     },
 
     getCity() {
@@ -373,7 +272,7 @@ export default {
         this.$http.post(
           "clients",
           this.clients,
-          res => {
+          (res) => {
             this.$swal({
               icon: "success",
               title: "Sucesso!",
@@ -383,9 +282,9 @@ export default {
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.log(res);
+              console.log(res);
           },
-          err => {
+          (err) => {
             this.$swal({
               icon: "error",
               title: "Atenção!",
@@ -395,17 +294,15 @@ export default {
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.error(err);
+              console.error(err);
           }
-        ) 
-
+        );
       } else {
-
         this.$http.put(
           "clients",
-          this.clients,
           this.clients.id,
-          res => {
+          this.clients,
+          (res) => {
             this.$swal({
               icon: "success",
               title: "Sucesso!",
@@ -415,10 +312,10 @@ export default {
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.log(res),
-            this.cancelForm()
+              console.log(res),
+              this.cancelForm();
           },
-          err => {
+          (err) => {
             this.$swal({
               icon: "error",
               title: "Atenção!",
@@ -428,9 +325,9 @@ export default {
               timerProgressBar: true,
               timer: 3000,
             }),
-            console.error(err);
+              console.error(err);
           }
-        ) 
+        );
       }
 
       //Atualiza dinamicamente a lista de clientes
@@ -438,96 +335,6 @@ export default {
         this.getClients();
         this.cancelForm();
       }, 1000);
-    },
-
-    sendFormService() {
-
-      this.servicesByClients.client_id = this.selected.id;
-
-      if (!this.servicesByClients.id) {
-
-        this.$http.post(
-          "servicesByClients",
-          this.servicesByClients,
-          res => {
-            this.$swal({
-              icon: "success",
-              title: "Sucesso!",
-              html:
-                '<div style="padding-bottom: 2.3em">Serviço vinculado ao cliente com sucesso!</div>',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            }),
-            console.log(res)
-          },
-          err => {
-            this.$swal({
-              icon: "error",
-              title: "Atenção!",
-              html:
-                '<div style="padding-bottom: 2.3em">Não foi possível vincular o serviço ao cliente!</div>',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            }),
-            console.error(err)
-          }
-        )
-
-      } else {
-
-        this.$http.put(
-          "servicesByClients",
-          this.servicesByClients,
-          this.servicesByClients.id,
-          res => {
-            this.$swal({
-              icon: "success",
-              title: "Sucesso!",
-              html:
-                '<div style="padding-bottom: 2.3em">Serviço atualizado com sucesso!</div>',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            }),
-            console.log(res),
-            this.cancelForm();
-          },
-          err => {
-            this.$swal({
-              icon: "error",
-              title: "Atenção!",
-              html:
-                '<div style="padding-bottom: 2.3em">Não foi possível alterar o serviço!</div>',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            }),
-            console.error(err);
-          },
-        )
-      }
-
-      //Atualiza dinamicamente a lista de clientes
-      setTimeout(() => {
-        this.getClients()
-        this.cancelForm()
-      }, 1000)
-
-    },
-
-    editService(service) {
-      switch (service.service_id) {
-        case 1:
-
-          this.$router.push({ name: "Home" });
-          this.$store.commit("SITE", {
-            service: service
-          });
-          
-          break;
-      }
     },
 
     remove(data) {
@@ -546,11 +353,10 @@ export default {
         confirmButtonText: `Excluir`,
       }).then((result) => {
         if (result.isConfirmed) {
-
           this.$http.delete(
             "clients",
             `${data.id}`,
-            res => {
+            (res) => {
               this.$swal({
                 icon: "success",
                 title: "Sucesso!",
@@ -560,9 +366,9 @@ export default {
                 timerProgressBar: true,
                 timer: 3000,
               }),
-              console.log(res);
+                console.log(res);
             },
-            err => {
+            (err) => {
               this.$swal({
                 icon: "error",
                 title: "Atenção!",
@@ -572,12 +378,12 @@ export default {
                 timerProgressBar: true,
                 timer: 3000,
               }),
-              console.error(err);
+                console.error(err);
             }
-          )
+          );
           setTimeout(() => {
-            this.getClients()
-            this.cancelForm()
+            this.getClients();
+            this.cancelForm();
           }, 1000);
         } else if (result.isDenied) {
           this.$swal({
@@ -593,110 +399,24 @@ export default {
       });
     },
 
-    removeService(data) {
-      this.$swal({
-        title: "Exclusão",
-        html: "Deseja realmente desvincular o serviço desse cliente?",
-        showDenyButton: true,
-        reverseButtons: true,
-        showClass: {
-          popup: "animate__animated animate__fadeIn",
-        },
-        hideClass: {
-          popup: "animate__animated animate__fadeOut",
-        },
-        denyButtonText: `Cancelar`,
-        confirmButtonText: `Excluir`,
-      }).then((result) => {
-        if (result.isConfirmed) {
-
-          this.$http.delete(
-            "servicesByClients",
-            `${data.id}`,
-            res => {
-              this.$swal({
-                icon: "success",
-                title: "Sucesso!",
-                html:
-                  '<div style="padding-bottom: 2.3em">Serviço desvinculado do cliente com sucesso!</div>',
-                showConfirmButton: false,
-                timerProgressBar: true,
-                timer: 3000,
-              }),
-              console.log(res);
-            },
-            err => {
-              this.$swal({
-                icon: "error",
-                title: "Atenção!",
-                html:
-                  '<div style="padding-bottom: 2.3em">Não foi possível desvincular o serviço desse cliente!</div>',
-                showConfirmButton: false,
-                timerProgressBar: true,
-                timer: 3000,
-              }),
-              console.error(err);
-            }
-          )
-          setTimeout(() => {
-            this.getClients();
-            this.cancelForm();
-          }, 1000);
-        } else if (result.isDenied) {
-          this.$swal({
-            icon: "info",
-            title: "Tudo Bem!",
-            html:
-              '<div style="padding-bottom: 2.3em">O serviço permanece vinculado ao cliente!</div>',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 3000,
-          });
-        }
-      });
-    },
-
     viewForm() {
       this.title = "Adicionar";
       this.add = true;
       this.viewClients = false;
-      this.viewServices = false;
-    },
-
-    viewFormService() {
-      this.title = "Adicionar Serviço",
-      this.add = false,
-      this.addService = true,
-      this.viewClients = false,
-      this.viewServices = false
-    },
-
-    viewServicesByClients(client) {
-      this.title = client.first_name + " " + client.last_name,
-      this.viewClients = false,
-      this.viewServices = true,
-
-      this.$http.get(
-        `servicesByClients/${client.id}`,
-        res => this.data2 = res.data.data,
-        err => console.error(err)
-      )
     },
 
     viewFormToEdit(data) {
-      this.clients = data
-      this.getCity()
-      this.title = "Editar"
-      this.add = true
-      this.viewServices = false
+      this.clients = data;
+      this.getCity();
+      this.title = "Editar";
+      this.add = true;
+      this.viewClients = false;
     },
 
     cancelForm() {
-      this.title = "Clientes"
-      this.add = false
-      this.viewClients = true
-      this.viewServices = false
-      this.addService = false
+      this.title = "Clientes";
+      this.add = false;
+      this.viewClients = true;
     },
 
     clearForm() {
@@ -722,28 +442,17 @@ export default {
         return "Inativo";
       }
     },
-  
   },
 
   mounted() {
-    this.title = "Clientes"
-    this.getClients()
-    this.getStates()
-    this.getServices()
+    this.title = "Clientes";
+    this.getClients();
+    this.getStates();
   },
 };
 </script>
 
 <style scoped>
-.card-service {
-  background-color: #e9ecef;
-}
-
-.addService {
-  background-color: #f3f3f3;
-  color: #757575;
-}
-
 .btnTitle {
   padding-left: 5px;
   line-height: 42px;
