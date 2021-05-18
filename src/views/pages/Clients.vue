@@ -28,7 +28,7 @@
             </div>
           </md-card-header>
           <md-card-content>
-            <div v-if="data.length > 0">
+            <div v-if="this.data.length > 0">
               <!-- Listagem -->
               <md-table
                 v-model="data"
@@ -64,7 +64,7 @@
                 </md-table-row>
               </md-table>
             </div>
-            <div class="empty" v-else>
+            <div class="empty" v-if="add == false && this.data.length == 0">
               <div class="md-layout md-gutter md-content">
                 <div class="md-layout-item">
                   <img :src="empty" />

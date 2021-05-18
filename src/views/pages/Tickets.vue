@@ -79,6 +79,9 @@
                 <md-table-cell md-label="Título" md-sort-by="title">
                   {{ item.title }}
                 </md-table-cell>
+                <md-table-cell md-label="Cliente" md-sort-by="client_first_name">
+                  {{ item.client_first_name }} {{ item.client_last_name }}
+                </md-table-cell>
                 <md-table-cell md-label="Usuário">
                   {{ item.first_name }} {{ item.last_name }}
                 </md-table-cell>
@@ -193,10 +196,27 @@
             <!-- Cadastro de Tickets -->
             <div class="md-layout" v-if="add == true">
               <form @submit.prevent="sendForm">
-                <div class="md-layout-item md-small-size-100 md-size-80">
+                <div class="md-layout-item md-small-size-100 md-size-60">
                   <md-field>
                     <label>Título</label>
                     <md-input v-model="tickets.title" type="text"></md-input>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-20">
+                  <md-field>
+                    <label>Cliente</label>
+                    <md-select
+                      v-model="tickets.client_id"
+                      name="state"
+                      id="state"
+                    >
+                      <md-option
+                        v-for="client in clients"
+                        :key="client.id"
+                        :value="client.id"
+                        >{{ client.first_name }} {{ client.last_name}}</md-option
+                      >
+                    </md-select>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-20">
@@ -249,10 +269,12 @@ export default {
       title: "",
       data: [],
       tickets: [],
+      clients: [],
       statusTicket: [],
       followTickets: [],
       ticket: {
         user_id: "",
+        client_id: "",
         status_id: "",
         title: "",
         description: "",
@@ -281,6 +303,14 @@ export default {
       );
     },
 
+    getClients() {
+      this.$http.get(
+        "clients",
+        (res) => (this.clients = res.data.data),
+        (err) => console.error(err)
+      );
+    },
+
     getStatusTicket() {
       this.$http.get(
         "statusTicket",
@@ -303,6 +333,7 @@ export default {
     },
 
     sendForm() {
+      this.tickets.user_id = this.$cookies.get("user_id");
       if (!this.tickets.id) {
         this.$http.post(
           "tickets",
@@ -604,6 +635,7 @@ export default {
     clearForm() {
       this.tickets = {
         user_id: "",
+        client_id: "",
         status_id: 1,
         title: "",
         description: "",
@@ -622,6 +654,7 @@ export default {
   mounted() {
     this.title = "Tickets";
     this.getTickets();
+    this.getClients();
     this.getStatusTicket();
   },
 };
