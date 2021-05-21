@@ -1,6 +1,6 @@
-  <template>
-  <div>
-    <div class="md-layout md-gutter md-content">
+<template>
+  <div class="systemContent">
+    <div class="md-layout md-content container-fluid">
       <div class="md-layout-item">
         <md-card>
           <md-card-header>

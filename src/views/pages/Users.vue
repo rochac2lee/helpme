@@ -1,6 +1,6 @@
-  <template>
-  <div>
-    <div class="md-layout md-gutter md-content">
+<template>
+  <div class="systemContent">
+    <div class="md-layout md-content container-fluid">
       <div class="md-layout-item">
         <md-card>
           <md-card-header>
@@ -28,34 +28,47 @@
             </div>
           </md-card-header>
           <md-card-content>
-            <!-- Listagem -->
-            <md-table
-              v-model="users"
-              md-sort="first_name"
-              md-sort-order="asc"
-              md-card
-              md-fixed-header
-              v-if="viewUsers == true"
-            >
-              <md-table-row
-                slot="md-table-row"
-                slot-scope="{ item }"
-                @click="edit(item)"
+            <div v-if="this.users.length > 0">
+              <!-- Listagem -->
+              <md-table
+                v-model="users"
+                md-sort="first_name"
+                md-sort-order="asc"
+                md-card
+                md-fixed-header
+                v-if="viewUsers == true"
               >
-                <md-table-cell md-label="Nome Completo">
-                  {{ item.first_name }} {{ item.last_name }}
-                </md-table-cell>
-                <md-table-cell md-label="Perfil">{{
-                  item.permission
-                }}</md-table-cell>
-                <md-table-cell md-label="Usuário">{{
-                  item.username
-                }}</md-table-cell>
-                <md-table-cell md-label="Email">{{
-                  item.email
-                }}</md-table-cell>
-              </md-table-row>
-            </md-table>
+                <md-table-row
+                  slot="md-table-row"
+                  slot-scope="{ item }"
+                  @click="edit(item)"
+                >
+                  <md-table-cell md-label="Nome Completo">
+                    {{ item.first_name }} {{ item.last_name }}
+                  </md-table-cell>
+                  <md-table-cell md-label="Perfil">{{
+                    item.permission
+                  }}</md-table-cell>
+                  <md-table-cell md-label="Usuário">{{
+                    item.username
+                  }}</md-table-cell>
+                  <md-table-cell md-label="Email">{{
+                    item.email
+                  }}</md-table-cell>
+                </md-table-row>
+              </md-table>
+            </div>
+            <div class="empty" v-if="add == false && this.users.length == 0">
+              <div class="md-layout md-gutter md-content">
+                <div class="md-layout-item">
+                  <img :src="empty" />
+                </div>
+                <div class="md-layout-item emptyMessage">
+                  <h1>Opa!</h1>
+                  <h3>Nada para mostrar aqui</h3>
+                </div>
+              </div>
+            </div>
 
             <!-- Cadastro de usuários -->
             <div class="md-layout" v-if="add == true">
@@ -188,6 +201,9 @@ export default {
       add: false,
       selected: "",
       viewUsers: true,
+
+      //Imagem de retorno quando não houverem dados cadastrados
+      empty: require("../../assets/images/undraw_empty_xct9.png"),
     };
   },
   methods: {

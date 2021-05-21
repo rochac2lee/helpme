@@ -42,6 +42,8 @@ const actions = {
                         this.user = res.data.data
                         Vue.$cookies.set('user_id', this.user.id)
                         Vue.$cookies.set('client_id', this.user.client_id)
+                        Vue.$cookies.set('first_name', this.user.first_name)
+                        Vue.$cookies.set('last_name', this.user.last_name)
                         Vue.$cookies.set('rule_type', md5(this.user.permission_id))
                         Vue.$cookies.set('user_token', res.data.data.token)
                         resolve(res.data.data)

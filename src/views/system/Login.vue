@@ -44,7 +44,10 @@
         >
       </div>
       <div class="md-layout-item md-small-size-100 md-size-70 loginRight">
-        <img :src="logo_managio" width="80%" class="logoLogin" top="15px" />
+       <h1 style="font-size: 100px">help.me</h1>
+       <center>
+        <h2>Sistema de Gestão de Chamados</h2>
+       </center>
       </div>
     </div>
   </div>

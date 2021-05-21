@@ -1,6 +1,6 @@
   <template>
-  <div>
-    <div class="md-layout md-gutter md-content">
+  <div class="systemContent">
+    <div class="md-layout md-content container-fluid">
       <div class="md-layout-item">
         <md-card>
           <md-card-header>
@@ -10,8 +10,12 @@
               <span v-if="this.selected.status_id != 4">
                 <md-button
                   class="md-icon-button inline-flex"
+                  style="margin-right: 10px"
                   v-if="viewFollowTicket == true"
-                  @click="viewUpdateTicket = !viewUpdateTicket, clearFollowTicketForm()"
+                  @click="
+                    (viewUpdateTicket = !viewUpdateTicket),
+                      clearFollowTicketForm()
+                  "
                 >
                   <md-icon>refresh</md-icon>
                 </md-button>
@@ -21,9 +25,12 @@
                   class="md-square inline-flex"
                   style="margin-right: 15px"
                   v-if="viewFollowTicket == true"
-                  @click="viewUpdateTicket = !viewUpdateTicket, clearFollowTicketForm()"
+                  @click="
+                    (viewUpdateTicket = !viewUpdateTicket),
+                      clearFollowTicketForm()
+                  "
                 >
-                reabrir ticket
+                  reabrir ticket
                 </md-button>
               </span>
               <md-button
@@ -55,38 +62,54 @@
             </div>
           </md-card-header>
           <md-card-content>
-            <!-- Listagem -->
-            <md-table
-              v-model="tickets"
-              md-sort="first_name"
-              md-sort-order="asc"
-              md-card
-              md-fixed-header
-              v-if="viewTicket == true"
-            >
-              <md-table-row
-                slot="md-table-row"
-                slot-scope="{ item }"
-                @click="(selected = item), getFollowTicketById(item)"
+            <div v-if="this.tickets.length > 0">
+              <!-- Listagem -->
+              <md-table
+                v-model="tickets"
+                md-sort="first_name"
+                md-sort-order="asc"
+                md-card
+                md-fixed-header
+                v-if="viewTicket == true"
               >
-                <md-table-cell md-label="Status" md-sort-by="status">
-                  <md-badge
-                    :class="badgeVariant(item.status_id)"
-                    class="md-square"
-                    :md-content="item.status"
-                  />
-                </md-table-cell>
-                <md-table-cell md-label="Título" md-sort-by="title">
-                  {{ item.title }}
-                </md-table-cell>
-                <md-table-cell md-label="Cliente" md-sort-by="client_first_name">
-                  {{ item.client_first_name }} {{ item.client_last_name }}
-                </md-table-cell>
-                <md-table-cell md-label="Usuário">
-                  {{ item.first_name }} {{ item.last_name }}
-                </md-table-cell>
-              </md-table-row>
-            </md-table>
+                <md-table-row
+                  slot="md-table-row"
+                  slot-scope="{ item }"
+                  @click="(selected = item), getFollowTicketById(item)"
+                >
+                  <md-table-cell md-label="Status" md-sort-by="status">
+                    <md-badge
+                      :class="badgeVariant(item.status_id)"
+                      class="md-square"
+                      :md-content="item.status"
+                    />
+                  </md-table-cell>
+                  <md-table-cell md-label="Título" md-sort-by="title">
+                    {{ item.title }}
+                  </md-table-cell>
+                  <md-table-cell
+                    md-label="Cliente"
+                    md-sort-by="client_first_name"
+                  >
+                    {{ item.client_first_name }} {{ item.client_last_name }}
+                  </md-table-cell>
+                  <md-table-cell md-label="Usuário">
+                    {{ item.first_name }} {{ item.last_name }}
+                  </md-table-cell>
+                </md-table-row>
+              </md-table>
+            </div>
+            <div class="empty" v-if="add == false && this.tickets.length == 0">
+              <div class="md-layout md-gutter md-content">
+                <div class="md-layout-item">
+                  <img :src="empty" />
+                </div>
+                <div class="md-layout-item emptyMessage">
+                  <h1>Opa!</h1>
+                  <h3>Nada para mostrar aqui</h3>
+                </div>
+              </div>
+            </div>
 
             <!-- Atualizações do Ticket selecionado -->
             <div
@@ -118,7 +141,9 @@
                   <div class="md-layout-item md-size-100">
                     <md-field maxlength="5">
                       <label>Descrição</label>
-                      <md-textarea v-model="followTicket.description"></md-textarea>
+                      <md-textarea
+                        v-model="followTicket.description"
+                      ></md-textarea>
                     </md-field>
                   </div>
                   <div class="md-layout-item md-size-100 textRight">
@@ -196,13 +221,13 @@
             <!-- Cadastro de Tickets -->
             <div class="md-layout" v-if="add == true">
               <form @submit.prevent="sendForm">
-                <div class="md-layout-item md-small-size-100 md-size-60">
+                <div class="md-layout-item md-small-size-100" :class="{ 'md-size-60' : this.clients.length != 0 , 'md-size-80' : this.clients.length == 0 }">
                   <md-field>
                     <label>Título</label>
                     <md-input v-model="tickets.title" type="text"></md-input>
                   </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-20">
+                <div class="md-layout-item md-small-size-100 md-size-20" v-if="this.clients.length != 0">
                   <md-field>
                     <label>Cliente</label>
                     <md-select
@@ -214,7 +239,8 @@
                         v-for="client in clients"
                         :key="client.id"
                         :value="client.id"
-                        >{{ client.first_name }} {{ client.last_name}}</md-option
+                        >{{ client.first_name }}
+                        {{ client.last_name }}</md-option
                       >
                     </md-select>
                   </md-field>
@@ -292,6 +318,9 @@ export default {
       viewFollowTicket: false,
       viewUpdateTicket: false,
       user: require("../../assets/undraw_male_avatar_323b.png"),
+
+      //Imagem de retorno quando não houverem dados cadastrados
+      empty: require("../../assets/images/undraw_empty_xct9.png"),
     };
   },
   methods: {
@@ -420,7 +449,7 @@ export default {
             timerProgressBar: true,
             timer: 3000,
           }),
-            console.log(res)
+            console.log(res);
         },
         (err) => {
           this.$swal({
@@ -586,7 +615,6 @@ export default {
         description: "",
       };
     },
-
   },
 
   mounted() {

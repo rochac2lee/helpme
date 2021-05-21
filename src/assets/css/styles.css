@@ -1,10 +1,17 @@
 :root {
     /* --cor-bg-principal: #00266b; */
-    --cor-bg-principal: #2e2d2d;
+    --cor-bg-principal: #0F44B0;
 }
 
 .systemContent {
     display: flex;
+    margin-left: 250px;
+}
+
+.systemContentHome {
+    display: block;
+    margin-left: 270px;
+    margin-right: 20px;
 }
 
 .systemContent h3 {
@@ -25,7 +32,7 @@
 }
 
 .md-theme-default a:not(.md-button):hover {
-    color: #3c3c3c;
+    color: #007CB6;
 }
 
 .md-card-content {
@@ -356,7 +363,7 @@ input :focus {
 
 .loginLeft {
     padding-top: 10%;
-    background: linear-gradient( 0deg, #3c3c3c 0%, var(--cor-bg-principal) 100%);
+    background: linear-gradient( 0deg, #1852b0 0%, #15388F 100%);
 }
 
 .loginLeft label,
@@ -385,6 +392,10 @@ input :focus {
 .loginRight h1 {
     font-weight: 400;
     text-align: center;
+}
+
+.md-layout-item {
+    color: var(--cor-bg-principal);
 }
 
 .login .md-layout-item {
@@ -521,7 +532,7 @@ a {
 
 .v-sidebar-menu {
     max-width: 80px;
-    background: linear-gradient(0deg, #3c3c3c 0%, var(--cor-bg-principal) 100%);
+    background: linear-gradient( 0deg, #1852b0 0%, #15388F 100%);
 }
 
 .nameUserTicket {
@@ -542,8 +553,8 @@ a {
 }
 
 .v-sidebar-menu.vsm_relative {
-    position: relative;
-    height: 93vh;
+    position: fixed;
+    height: 100vh;
     float: left;
 }
 
@@ -572,18 +583,30 @@ a {
     color: var(--cor-bg-principal);
 }
 
+.systemContent .container-fluid {
+    padding-left: 0;
+    margin-top: 65px;
+    padding-right: 0;
+}
+
+.systemContentHome .container-fluid-home {
+    padding-left: 0;
+    padding-top: 80px;
+    padding-right: 0;
+}
+
 .container,
 .container-fluid,
 .container-sm,
 .container-md,
 .container-lg,
 .container-xl {
-    width: 95%;
+    width: 100%;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
-    margin: 2% 0% 0% 2%;
+    margin: 15px;
 }
 
 .v-sidebar-menu .vsm--header {
@@ -622,8 +645,12 @@ a {
     background-color: #082456;
 }
 
+.vsm--list {
+    padding-top: 64px;
+}
+
 .v-sidebar-menu .vsm--dropdown>.vsm--list {
-    padding: 0;
+    padding-top: 40px;
 }
 
 .vsm--link_level-2 .vsm--title {
@@ -740,6 +767,12 @@ a {
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.navbarTop {
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+}
+
 .navbar {
     position: relative;
     display: flex;
@@ -836,12 +869,12 @@ a {
 
 .md-speed-dial-target {
     color: #fff;
-    color: var(--md-theme-demo-light-text-primary-on-primary, #fff);
+    color: #0F44B0;
 }
 
 .md-raised {
     color: rgba(0, 0, 0, .54);
-    color: var(--md-theme-demo-light-icon-on-background, rgba(0, 0, 0, .54));
+    color: #0F44B0;
 }
 
 .divList {
@@ -1275,7 +1308,7 @@ input[type="file"] {
 }
 
 .md-app-toolbar {
-    background-color: var(--cor-bg-principal)!important;
+    background-color: #15388F!important;
     color: white;
 }
 
@@ -1344,7 +1377,7 @@ input[type="file"] {
 }
 
 .md-navbarMessagesBottom .md-icon-button .send {
-    color: #8a8a8a;
+    color: #0F44B0;
 }
 
 .md-list-item {
@@ -1697,7 +1730,7 @@ input[type="file"] {
 .createMessageButtons .send {
     padding: 5px;
     font-size: 20px;
-    color: #8a8a8a;
+    color: #0F44B0;
 }
 
 .createMessageButtons i {

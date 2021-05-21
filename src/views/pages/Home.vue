@@ -1,7 +1,14 @@
 <template>
-  <div>
-
-
+  <div class="systemContentHome">
+    <div
+      class="md-layout md-gutter md-content container-fluid-home"
+      v-if="rule_type == true"
+    >
+      <div class="md-layout-item">
+        Seja bem vindo(a) <b>{{this.$cookies.get('first_name')}}</b>
+      </div>
+    </div>
+    <hr>
     <div
       class="md-layout md-gutter textRight md-content"
       v-if="rule_type == true"
@@ -41,7 +48,6 @@
           </md-card-content>
         </md-card>
       </div>
-
     </div>
 
     <div
@@ -71,9 +77,7 @@
           </md-card-content>
         </md-card>
       </div>
-
     </div>
-
   </div>
 </template>
 
@@ -100,7 +104,6 @@ export default {
   },
 
   methods: {
-
     // Dashboard de Administrador
     getDashboard() {
       this.$http.get(
@@ -112,10 +115,10 @@ export default {
         (err) => {
           console.error(err);
         }
-      )
-    }
+      );
+    },
   },
-  
+
   mounted() {
     this.getDashboard();
   },

@@ -1,10 +1,10 @@
 <template>
-  <div class="page-container">
+  <div class="navbarTop">
     <md-app>
       <md-app-toolbar class="md-primary">
         <div class="md-toolbar-row">
           <div class="md-toolbar-section-start">
-            <span class="md-title">manag.io</span>
+            <span class="md-title">help.me</span>
           </div>
           <div class="md-toolbar-section-end">
             <md-menu md-size="huge" :md-offset-x="-230" :md-offset-y="8">
