@@ -50,7 +50,7 @@
                     {{ item.first_name }} {{ item.last_name }}
                   </md-table-cell>
                   <md-table-cell md-label="Email" md-sort-by="email">{{
-                    item.email
+                    item.email != null ? item.email : 'Não informado'
                   }}</md-table-cell>
                   <md-table-cell md-label="Telefone" md-sort-by="phone">
                     <the-mask

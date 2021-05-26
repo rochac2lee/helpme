@@ -77,7 +77,7 @@
                   slot-scope="{ item }"
                   @click="(selected = item), getFollowTicketById(item)"
                 >
-                  <md-table-cell md-label="Status" md-sort-by="status">
+                  <md-table-cell md-label="Status" style="width: 140px">
                     <md-badge
                       :class="badgeVariant(item.status_id)"
                       class="md-square"

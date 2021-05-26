@@ -392,6 +392,7 @@ input :focus {
 .loginRight h1 {
     font-weight: 400;
     text-align: center;
+    padding-top: 10%;
 }
 
 .md-layout-item {
