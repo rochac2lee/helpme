@@ -141,10 +141,8 @@
                   <div class="md-layout-item md-size-100">
                     <md-field maxlength="5">
                       <label>Descrição</label>
-                      <md-textarea
-                        v-model="followTicket.description"
-                      ></md-textarea>
                     </md-field>
+                    <vue-editor v-model="followTicket.description"></vue-editor>
                   </div>
                   <div class="md-layout-item md-size-100 textRight">
                     <md-button type="submit" class="md-raised md-success">
@@ -164,9 +162,8 @@
                       <md-card-expand>
                         <div class="left">
                           <md-icon>info</md-icon>
-                          <span class="ticketUser">
-                            {{ selected.description }}
-                          </span>
+                          <div class="ticketUser" v-html="selected.description">
+                          </div>
                         </div>
                         <div class="right">
                           {{ selected.created_at }}
@@ -189,9 +186,8 @@
                       <md-card-expand>
                         <div class="left">
                           <md-icon>info</md-icon>
-                          <span class="ticketUser">
-                            {{ data.description }}
-                          </span>
+                          <div class="ticketUser" v-html="data.description">
+                          </div>
                         </div>
                         <div class="right">
                           {{ data.created_at }}
@@ -221,13 +217,22 @@
             <!-- Cadastro de Tickets -->
             <div class="md-layout" v-if="add == true">
               <form @submit.prevent="sendForm">
-                <div class="md-layout-item md-small-size-100" :class="{ 'md-size-60' : this.clients.length != 0 , 'md-size-80' : this.clients.length == 0 }">
+                <div
+                  class="md-layout-item md-small-size-100"
+                  :class="{
+                    'md-size-60': this.clients.length != 0,
+                    'md-size-80': this.clients.length == 0,
+                  }"
+                >
                   <md-field>
                     <label>Título</label>
                     <md-input v-model="tickets.title" type="text"></md-input>
                   </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-20" v-if="this.clients.length != 0">
+                <div
+                  class="md-layout-item md-small-size-100 md-size-20"
+                  v-if="this.clients.length != 0"
+                >
                   <md-field>
                     <label>Cliente</label>
                     <md-select
@@ -265,8 +270,8 @@
                 <div class="md-layout-item md-size-100">
                   <md-field maxlength="5">
                     <label>Descrição</label>
-                    <md-textarea v-model="tickets.description"></md-textarea>
                   </md-field>
+                  <vue-editor v-model="tickets.description"></vue-editor>
                 </div>
                 <div class="md-layout-item md-size-100 textRight">
                   <md-button type="submit" class="md-raised md-success">
@@ -288,8 +293,13 @@ import Vue from "vue";
 import VueTheMask from "vue-the-mask";
 Vue.use(VueTheMask);
 
+import { VueEditor } from "vue2-editor";
+
 export default {
   name: "clients",
+  components: {
+    VueEditor,
+  },
   data() {
     return {
       title: "",
