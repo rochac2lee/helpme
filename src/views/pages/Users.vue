@@ -58,7 +58,7 @@
                 </md-table-row>
               </md-table>
             </div>
-            <div class="empty" v-if="add == false && this.users.length == 0">
+            <!-- <div class="empty" v-if="add == false && this.users.length == 0">
               <div class="md-layout md-gutter md-content">
                 <div class="md-layout-item">
                   <img :src="empty" />
@@ -68,7 +68,7 @@
                   <h3>Nada para mostrar aqui</h3>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <!-- Cadastro de usuários -->
             <div class="md-layout" v-if="add == true">

@@ -64,17 +64,6 @@
                 </md-table-row>
               </md-table>
             </div>
-            <div class="empty" v-if="add == false && this.data.length == 0">
-              <div class="md-layout md-gutter md-content">
-                <div class="md-layout-item">
-                  <img :src="empty" />
-                </div>
-                <div class="md-layout-item emptyMessage">
-                  <h1>Opa!</h1>
-                  <h3>Nada para mostrar aqui</h3>
-                </div>
-              </div>
-            </div>
 
             <!-- Cadastro de clientes -->
             <div class="md-layout" v-if="add == true">

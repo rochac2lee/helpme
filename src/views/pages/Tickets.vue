@@ -99,17 +99,6 @@
                 </md-table-row>
               </md-table>
             </div>
-            <div class="empty" v-if="add == false && this.tickets.length == 0">
-              <div class="md-layout md-gutter md-content">
-                <div class="md-layout-item">
-                  <img :src="empty" />
-                </div>
-                <div class="md-layout-item emptyMessage">
-                  <h1>Opa!</h1>
-                  <h3>Nada para mostrar aqui</h3>
-                </div>
-              </div>
-            </div>
 
             <!-- Atualizações do Ticket selecionado -->
             <div
