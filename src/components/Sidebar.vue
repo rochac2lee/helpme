@@ -12,7 +12,7 @@
       :menu="menu"
       @mouseover.native="isHovering = true"
       @mouseout.native="hideToggleButton"
-      width="250px"
+      width="200px"
       widthCollapsed="80px"
       :showOneChild="true"
       :hideToggle="true"
@@ -71,7 +71,7 @@ export default {
           },
           {
             href: "/tickets",
-            title: "Chamados",
+            title: "Tickets",
             icon: "fa fa-ticket-alt",
           },
           {

@@ -1,9 +1,9 @@
 <template>
   <div>
     <vueTopprogress></vueTopprogress>
-    <navbar></navbar>
     <div class="main-content">
       <sidebar></sidebar>
+      <navbar></navbar>
       <router-view :rule_type="admin"></router-view>
     </div>
   </div>
