@@ -137,6 +137,9 @@ export default {
 </script>
 
 <style scoped>
+.column-head p {
+  margin: 0;
+}
 .column-head {
   padding-bottom: 20px;
 }
