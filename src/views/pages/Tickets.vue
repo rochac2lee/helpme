@@ -53,6 +53,14 @@
               </md-button>
 
               <md-button
+                v-if="viewFollowTicket == true"
+                class="md-icon-button inline-flex"
+                @click="removeTicket(selected)"
+              >
+                <md-icon>delete</md-icon>
+              </md-button>
+
+              <md-button
                 class="md-icon-button inline-flex"
                 v-if="viewTicket == false"
                 @click="cancelForm()"
@@ -128,10 +136,7 @@
                     </md-field>
                   </div>
                   <div class="md-layout-item md-size-100">
-                    <md-field maxlength="5">
-                      <label>Descrição</label>
-                    </md-field>
-                    <vue-editor v-model="followTicket.description"></vue-editor>
+                    <vue-editor v-model="followTicket.description" placeholder="Descrição detalhada"></vue-editor>
                   </div>
                   <div class="md-layout-item md-size-100 textRight">
                     <md-button type="submit" class="md-raised md-success">
@@ -150,7 +155,6 @@
                     <md-card-content md-alignment="space-between">
                       <md-card-expand>
                         <div class="left">
-                          <md-icon>info</md-icon>
                           <div class="ticketUser" v-html="selected.description">
                           </div>
                         </div>
@@ -174,7 +178,6 @@
                     <md-card-content md-alignment="space-between">
                       <md-card-expand>
                         <div class="left">
-                          <md-icon>info</md-icon>
                           <div class="ticketUser" v-html="data.description">
                           </div>
                         </div>
@@ -257,10 +260,7 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
-                  <md-field maxlength="5">
-                    <label>Descrição</label>
-                  </md-field>
-                  <vue-editor v-model="tickets.description"></vue-editor>
+                  <vue-editor v-model="tickets.description" placeholder="Descrição detalhada"></vue-editor>
                 </div>
                 <div class="md-layout-item md-size-100 textRight">
                   <md-button type="submit" class="md-raised md-success">
@@ -302,13 +302,13 @@ export default {
         client_id: "",
         status_id: "",
         title: "",
-        description: "",
+        description: null,
       },
       followTicket: {
         user_id: "",
         ticket_id: "",
         status_id: "",
-        description: "",
+        description: null,
       },
       add: false,
       addService: false,
@@ -330,6 +330,69 @@ export default {
         (err) => console.error(err)
       );
     },
+
+    removeTicket(data) {
+      this.$swal({
+        title: "Exclusão",
+        html: "Deseja realmente remover esse ticket?",
+        showDenyButton: true,
+        reverseButtons: true,
+        showClass: {
+          popup: "animate__animated animate__fadeIn",
+        },
+        hideClass: {
+          popup: "animate__animated animate__fadeOut",
+        },
+        denyButtonText: `Cancelar`,
+        confirmButtonText: `Excluir`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.$http.delete(
+            "tickets",
+            `${data.id}`,
+            (res) => {
+              this.$swal({
+                icon: "success",
+                title: "Sucesso!",
+                html:
+                  '<div style="padding-bottom: 2.3em">Ticket excluído com sucesso!</div>',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                timer: 3000,
+              }),
+                console.log(res);
+            },
+            (err) => {
+              this.$swal({
+                icon: "error",
+                title: "Atenção!",
+                html:
+                  '<div style="padding-bottom: 2.3em">Não foi possível excluir esse ticket!</div>',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                timer: 3000,
+              }),
+                console.error(err);
+            }
+          );
+          setTimeout(() => {
+            this.getTickets(this.selected);
+            this.cancelForm();
+          }, 1000);
+        } else if (result.isDenied) {
+          this.$swal({
+            icon: "info",
+            title: "Tudo Bem!",
+            html:
+              '<div style="padding-bottom: 2.3em">Ticket permanece cadastrado!</div>',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+        }
+      });
+    },
+
 
     getClients() {
       this.$http.get(
@@ -604,14 +667,14 @@ export default {
         client_id: "",
         status_id: 1,
         title: "",
-        description: "",
+        description: null,
       };
     },
 
     clearFollowTicketForm() {
       this.followTicket = {
         status_id: this.selected.status_id,
-        description: "",
+        description: null,
       };
     },
   },
