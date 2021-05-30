@@ -10,9 +10,11 @@ Link do Back-end: https://github.com/rochac2lee/helpme-api.git
 ## Features
 
 * [ ] Cadastro de usuários
+* [ ] Cadastro de clientes
 * [ ] Cadastro de tickets
+* [ ] Possível vincular tickets a clientes
+* [ ] Atualização de tickets
 * [ ] Dashboard com informações principais
-* [ ] Acompanhamento dos tickets em tempo real
 
 ## Requisitos
 
@@ -26,6 +28,10 @@ Link do Back-end: https://github.com/rochac2lee/helpme-api.git
 ```
 yarn install
 ```
+
+### Conexão com API 
+
+Defina o ip da sua api no arquivo src/http/index.js
 
 ### Gerar uma nova build
 
