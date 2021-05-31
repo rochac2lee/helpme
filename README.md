@@ -15,6 +15,7 @@ Link do Back-end: https://github.com/rochac2lee/helpme-api.git
 * [ ] Possível vincular tickets a clientes
 * [ ] Atualização de tickets
 * [ ] Dashboard em formato kanban
+* [ ] Notificações
 
 ## Requisitos
 

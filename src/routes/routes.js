@@ -28,6 +28,12 @@ const routes = [{
                 name: 'tickets',
                 component: () =>
                     import ('../views/pages/Tickets.vue'),
+            },
+            {
+                path: '/notifications',
+                name: 'notifications',
+                component: () =>
+                    import ('../views/pages/Notifications.vue'),
             }
         ]
     },

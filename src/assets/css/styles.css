@@ -88,7 +88,7 @@ form {
 }
 
 .md-toolbar-section-end .md-button {
-    min-width: 50px;
+    max-width: 50px;
 }
 
 .md-switch.md-theme-default.md-checked .md-switch-thumb {
@@ -1611,6 +1611,29 @@ input[type="file"] {
 
 .checks {
     width: 22px;
+}
+
+.notification {
+    width: 100%;
+    background-color: #e1e1e1;
+    border-radius: 10px;
+    padding: 15px 10px;
+    margin-bottom: 10px;
+}
+
+.notification:hover {
+    width: 100%;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 15px 10px;
+}
+
+.notificationsBadge .md-badge-content .md-position-top {
+    top: 13px!important;
+    right: 8px;
+    font-size: 10px;
+    width: 15px;
+    height: 15px;
 }
 
 .md-menu-content {

@@ -6,19 +6,23 @@
           <div class="md-toolbar-section-start">
             <span class="md-title">help.me</span>
           </div>
-          <div class="md-toolbar-section-end">
+          <div class="md-toolbar-section-end notificationsBadge">
             <md-menu md-size="huge" :md-offset-x="-230" :md-offset-y="8">
-              <md-button md-menu-trigger>
-                <md-icon>notifications</md-icon>
-              </md-button>
+                <md-badge id="teste" :md-content="qtdNotifications">
+                  <md-button @click="$router.push('notifications'), setReadAll()" class="md-icon-button">
+                    <md-icon>notifications</md-icon>
+                  </md-button>
+                </md-badge>
 
               <md-menu-content>
-                <md-menu-item>My Item 1</md-menu-item>
+                <md-list-item v-for="notification in notifications" :key="notification.id">
+                  {{ notification.message }}
+                </md-list-item>
               </md-menu-content>
             </md-menu>
 
             <md-menu md-size="huge" :md-offset-x="-200" :md-offset-y="8">
-              <md-button md-menu-trigger>
+              <md-button class="md-icon-button" md-menu-trigger>
                 <md-icon>person</md-icon>
               </md-button>
 
@@ -42,6 +46,8 @@ export default {
   data() {
     return {
       title: "Welcome",
+      qtdNotifications: null,
+      notifications: []
     };
   },
 
@@ -77,9 +83,49 @@ export default {
       var datum = Date.parse(strDate);
       return datum / 1000;
     },
+
+    getNotifications() {
+      let user_id = this.$cookies.get("user_id")
+      this.$http.get(
+        `notifications/allUnreaded/${user_id}`,
+        res => {
+          this.qtdNotifications = res.data.total
+        },
+        err => {
+          console.error(err);
+        }
+      )
+
+      if (this.qtdNotifications == null || this.qtdNotifications == 0) {
+        document.getElementsByClassName("md-badge")[0].classList.add("hidden");
+      } else {
+        document.getElementsByClassName("md-badge")[0].classList.remove("hidden");
+      }
+    },
+
+    setReadAll() {
+      let user_id = this.$cookies.get("user_id")
+      this.$http.get(
+        `notifications/readAll/${user_id}`,
+        res => {
+          console.log(res.data.data)
+        },
+        err => {
+          console.error(err);
+        }
+      ),
+      this.getNotifications()
+    }
   },
 
   mounted() {
+
+    this.getNotifications()  
+
+    setInterval(() => {
+      this.getNotifications()  
+    }, 5000);
+
     let now = this.toTimestamp(Date());
     let expire_time = this.$session.get("expire_time");
 
@@ -91,6 +137,7 @@ export default {
         //console.log("Token Válido");
       }
     }, 10000);
+
   },
 
   beforeCreate: function () {
