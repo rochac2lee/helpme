@@ -1,0 +1,11 @@
+php artisan db:seed --class=UsersTableSeeder
+php artisan db:seed --class=PermissionsTableSeeder
+php artisan db:seed --class=StatusTicketTableSeeder
+
+php artisan db:seed --class=InputsCategoriesTableSeeder
+php artisan db:seed --class=InputsSubcategoriesTableSeeder
+php artisan db:seed --class=OutputsCategoriesTableSeeder
+php artisan db:seed --class=OutputsSubcategoriesTableSeeder
+
+php artisan make:migration add_plan_id_table_services_by_clients --table=services_by_clients
+php artisan migrate
