@@ -42,10 +42,10 @@ class UsersTableSeeder extends Seeder
             "username" => "admin",
             "email" => "admin@example.com",
             "password" => md5("admin123"),
-            "status" => "true",
-            "notification" => "true",
+            "status" => true,
+            "notification" => true,
             "token" => $jwt_token,
-            "api_token" => $api_token
+            "api_token" => (string) $api_token
         ];
 
         DB::table('users')->insert($user);

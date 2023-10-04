@@ -9,6 +9,10 @@ class Permission extends Model
 {
     use HasFactory;
 
+    protected $cast = [
+        'status' => 'Boolean'
+    ];
+
     protected $fillable = [
         'permission',
         'status',

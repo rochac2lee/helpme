@@ -38,4 +38,9 @@ class User extends Authenticatable
         'password',
     ];
 
+    protected $cast = [
+        'status' => 'Boolean',
+        'notification' => 'Boolean'
+    ];
+
 }

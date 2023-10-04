@@ -1,0 +1,55 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:8.0.29
+    platform: linux/amd64
+    container_name: db-helpme
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_DATABASE: helpme
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./backend/.docker/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - helpme
+
+  backend:
+    depends_on:
+      - db
+    build:
+      args:
+        user: helpme
+        uid: 1000
+      context: ./backend
+      dockerfile: Dockerfile
+    image: backend-helpme
+    container_name: backend-helpme
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./backend/:/var/www
+    ports:
+      - 8000:8000
+    networks:
+      - helpme
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-helpme
+    working_dir: /app/frontend
+    volumes:
+      - ./frontend:/app/frontend
+    ports:
+      - 8080:8080
+    networks:
+      - helpme
+      
+networks:
+  helpme:
+    driver: bridge

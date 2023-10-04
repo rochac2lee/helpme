@@ -15,7 +15,7 @@ class CreateBriefingsTable extends Migration
     {
         Schema::create('briefings', function (Blueprint $table) {
             $table->id();
-            $table->integer("client_id")->nullable();
+            $table->integer("client_id")->unsigned()->nullable();
             $table->foreign("client_id")->references("id")->on("clients");
             $table->string("type")->nullable();
             $table->string("name")->nullable();

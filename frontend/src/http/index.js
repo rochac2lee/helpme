@@ -4,17 +4,8 @@ import VueCookies from "vue-cookies"
 
 Vue.use(VueCookies)
 
-const API_HOST = "45.82.72.105"
-
-//const API_HOST = window.location.hostname;
-//const API_PORT = 8000
-
-console.log(window.location);
-
-const API_REST = "helpme-api/api"
-
 const api = axios.create({
-    baseURL: `http://${API_HOST}/${API_REST}`
+    baseURL: process.env.VUE_APP_BASE_API_URL
 })
 
 const config = () => ({
@@ -67,7 +58,6 @@ const httpDelete = (endpoint, id, response, reject) =>
     .catch(reject)
 
 export default {
-    baseUrl: `http://${API_HOST}/${API_REST}`,
     post: httpPost,
     get: httpGet,
     put: httpPut,

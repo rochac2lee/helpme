@@ -14,10 +14,10 @@ class CreateInputsTable extends Migration
     public function up()
     {
         Schema::create('inputs', function (Blueprint $table) {
-            $table->id();
-            $table->integer("client_id")->nullable();
-            $table->foreign("client_id")->references("id")->on("clients");
-            $table->integer("service_id")->nullable();
+            $table->increments("id");
+            $table->integer('client_id')->unsigned()->nullable();
+            $table->foreign('client_id')->references('id')->on('clients');
+            $table->integer("service_id")->unsigned()->nullable();
             $table->foreign("service_id")->references("id")->on("services");
             $table->string("description");
             $table->integer("recurrence");

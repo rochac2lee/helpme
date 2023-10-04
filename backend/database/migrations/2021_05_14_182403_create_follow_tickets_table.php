@@ -19,7 +19,7 @@ class CreateFollowTicketsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer("ticket_id")->unsigned();
             $table->foreign('ticket_id')->references('id')->on('tickets');
-            $table->integer("status_id");
+            $table->integer("status_id")->unsigned();
             $table->foreign('status_id')->references('id')->on('status_tickets');
             $table->longText("description");
             $table->timestamps();

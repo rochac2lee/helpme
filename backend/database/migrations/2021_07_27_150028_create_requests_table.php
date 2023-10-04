@@ -15,7 +15,7 @@ class CreateRequestsTable extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->integer("client_id")->nullable();
+            $table->integer("client_id")->unsigned()->nullable();
             $table->foreign("client_id")->references("id")->on("clients");
             $table->string("type");
             $table->string("name");
@@ -25,6 +25,7 @@ class CreateRequestsTable extends Migration
             $table->string("additional_users")->nullable();
             $table->string("additional_whats")->nullable();
             $table->boolean("status");
+            $table->boolean("has_campaigns")->default(false);
             $table->timestamps();
         });
     }

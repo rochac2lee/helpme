@@ -16,7 +16,7 @@ class CreateStatusTicketsTable extends Migration
         Schema::dropIfExists('status_tickets');
 
         Schema::create('status_tickets', function (Blueprint $table) {
-            $table->id();
+            $table->increments("id");
             $table->string("status");
             $table->timestamps();
         });

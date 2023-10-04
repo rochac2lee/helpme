@@ -14,7 +14,7 @@ class CreateInputsCategoriesTable extends Migration
     public function up()
     {
         Schema::create('inputs_categories', function (Blueprint $table) {
-            $table->id();
+            $table->increments("id");
             $table->string("category")->nullable();
             $table->timestamps();
         });

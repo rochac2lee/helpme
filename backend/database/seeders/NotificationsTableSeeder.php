@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class NotificationsTableSeeder extends Seeder
 {
@@ -18,15 +18,16 @@ class NotificationsTableSeeder extends Seeder
 
         $users = User::all();
 
-        for ($i=0; $i < sizeof($users); $i++) {
+        foreach ($users as $user) {
+            $message = "Olá $user->name, Seja bem vindo ao sistema help.me!";
 
-            $user_id = $users[$i]->id;
-            $client_id = $users[$i]->client_id ? $users[$i]->client_id : "NULL";
-            $name = $users[$i]->first_name;
-
-            $message = "Olá $name, Seja bem vindo ao sistema help.me!";
-
-            DB::insert("INSERT INTO notifications (user_id, client_id, created_by, message, read) values ($user_id, $client_id, 0, '$message', false) ");
+            $notification = new Notification();
+            $notification->user_id = $user->id;
+            $notification->client_id = $user->client_id ?? NULL;
+            $notification->created_by = 0;
+            $notification->message = (string) $message;
+            $notification->read = false;
+            $notification->save();
         }
 
     }

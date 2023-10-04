@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->increments("id");
             $table->integer('client_id')->unsigned()->nullable();
             $table->foreign('client_id')->references('id')->on('clients');
             $table->integer('permission_id')->unsigned();
@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->boolean('notification');
             $table->longText('token');
             $table->longText('api_token');
+            $table->string("profile")->nullable();
             $table->timestamps();
         });
     }

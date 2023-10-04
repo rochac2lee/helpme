@@ -14,7 +14,7 @@ class CreateOutputsTable extends Migration
     public function up()
     {
         Schema::create('outputs', function (Blueprint $table) {
-            $table->id();
+            $table->increments("id");
             $table->string("description");
             $table->string("recurrence");
             $table->string("recurrence_lenght")->nullable();

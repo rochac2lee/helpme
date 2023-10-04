@@ -17,9 +17,9 @@ class CreateServicesByClientsTable extends Migration
 
         Schema::create('services_by_clients', function (Blueprint $table) {
             $table->id();
-            $table->integer("client_id");
+            $table->integer("client_id")->unsigned();
             $table->foreign("client_id")->references("id")->on("clients");
-            $table->integer("service_id");
+            $table->integer("service_id")->unsigned();
             $table->foreign("service_id")->references("id")->on("services");
             $table->string("title");
             $table->longText("description")->nullable();
